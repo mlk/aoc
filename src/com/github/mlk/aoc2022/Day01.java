@@ -3,7 +3,7 @@ package com.github.mlk.aoc2022;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Day1 {
+public class Day01 {
     static String data = """
     9057
     8878

@@ -3,7 +3,7 @@ package com.github.mlk.aoc2022;
 import java.util.Arrays;
 import java.util.Map;
 
-public class Day2 {
+public class Day02 {
     static String input = """
             C Y
             C X

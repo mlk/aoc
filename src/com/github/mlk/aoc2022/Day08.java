@@ -1,6 +1,6 @@
 package com.github.mlk.aoc2022;
 
-public class Day8 {
+public class Day08 {
     static String testData = """
             30373
             25512

@@ -3,7 +3,7 @@ package com.github.mlk.aoc2022;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Day3 {
+public class Day03 {
 
     static final String data = """
 lDDWVvlVVQfDMlWjGJTRjQCgTGLCLj

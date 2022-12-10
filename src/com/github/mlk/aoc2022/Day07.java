@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-public class Day7 {
+public class Day07 {
     static String data = """
             $ cd /
             $ ls

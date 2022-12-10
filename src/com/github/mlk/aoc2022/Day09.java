@@ -1,11 +1,9 @@
 package com.github.mlk.aoc2022;
 
-import java.awt.geom.Point2D;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Day9 {
+public class Day09 {
     static String input = """
             R 4
             U 4            

@@ -306,9 +306,6 @@ public class Day10 {
         Arrays.fill(currentCrtLine, '-');
 
         for(String line : data.split("\n")) {
-            /*if(cycle > 178) {
-                System.out.println("X: " + x + "c: " + cycle + " LINE " + line);
-            }*/
             if (line.startsWith("noop")) {
                 cycle = incCycle(cycle, x);
             } else if (line.startsWith("addx")) {
@@ -325,7 +322,7 @@ public class Day10 {
         if(pixel == (x -1) || pixel == x || pixel == x + 1) {
             currentCrtLine[pixel] = '#';
         } else {
-            currentCrtLine[pixel] = '.';
+            currentCrtLine[pixel] = ' ';
         }
 
         if(cycle % 40 == 0) {

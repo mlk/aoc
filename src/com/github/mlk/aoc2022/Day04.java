@@ -3,7 +3,7 @@ package com.github.mlk.aoc2022;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Day4 {
+public class Day04 {
     static final String demo = """
             2-4,6-8
             2-3,4-5
