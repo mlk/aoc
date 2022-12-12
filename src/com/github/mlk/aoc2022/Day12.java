@@ -114,7 +114,7 @@ public class Day12 {
 
         List<Point> validRoutes(int[][] heightMap) {
             return dirs.stream().map(x -> x.add(this))
-                    .filter(x-> !x.inBounds(heightMap.length, heightMap[0].length))
+                    .filter(x -> x.inBounds(heightMap.length, heightMap[0].length))
                     .filter(x -> x.heightAcceptable(this, heightMap))
                     .toList();
         }
@@ -126,7 +126,7 @@ public class Day12 {
         }
 
         boolean inBounds(int maxX, int maxY) {
-            return (x<0 || x>maxX-1 || y<0 || y>maxY-1);
+            return (x>=0 && x<maxX && y>0 && y<maxY);
         }
 
         Point add(Point p) {
