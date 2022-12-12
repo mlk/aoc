@@ -1,9 +1,6 @@
 package com.github.mlk.aoc2022;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Day12 {
     static String testInput = """
@@ -57,6 +54,7 @@ public class Day12 {
             abcccaacaaaaaccccccaaaaaaaaaaaaaaaaaaacccccaacccccccccccccccccccccccccccccccccaaaaa""";
 
     public static void main(String... args) {
+        long t = System.currentTimeMillis();
         String[] data = input.split("\n");
         List<Point> starts = new ArrayList<>();
         Point end = new Point(-1, -1);
@@ -72,7 +70,6 @@ public class Day12 {
                         starts.add(new Point(x, y));
                     }
                 } else if (heights[y] == 'S') {
-                    heightMap[x][y] = '0';
                     starts.add(new Point(x, y));
                 } else {
                     heightMap[x][y] = 25;
@@ -100,11 +97,13 @@ public class Day12 {
             currentLevel = nextLevel;
             nextLevel = new HashSet<>();
             if (currentLevel.size() == 0) {
-                break gotoFun;
+                throw new RuntimeException("No route");
             }
         }
 
         System.out.println(level);
+
+        System.out.println(System.currentTimeMillis() - t);
     }
 
     record Point(int x, int y) {
@@ -115,11 +114,11 @@ public class Day12 {
         List<Point> validRoutes(int[][] heightMap) {
             return dirs.stream().map(x -> x.add(this))
                     .filter(x -> x.inBounds(heightMap.length, heightMap[0].length))
-                    .filter(x -> x.heightAcceptable(this, heightMap))
+                    .filter(x -> x.isReachableFrom(this, heightMap))
                     .toList();
         }
 
-        boolean heightAcceptable(Point previousPoint, int[][] heightMap) {
+        boolean isReachableFrom(Point previousPoint, int[][] heightMap) {
             int currentHeight = heightMap[previousPoint.x()][previousPoint.y()];
             int newHeight = heightMap[x()][y()];
             return newHeight<=currentHeight+1;
