@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Day12 {
     static String testInput = """
@@ -113,8 +112,6 @@ public class Day12 {
         System.out.println(options);
         System.out.println(options.stream().sorted().findFirst());
     }
-
-
 
     record Point(int x, int y) {
         static List<Point> dirs = List.of(new Point(-1, 0),

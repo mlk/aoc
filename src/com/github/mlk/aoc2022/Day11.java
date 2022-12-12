@@ -1,13 +1,12 @@
 package com.github.mlk.aoc2022;
 
-import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class Day11 {
     static String testData = """

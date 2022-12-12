@@ -1,8 +1,6 @@
 package com.github.mlk.aoc2022;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Day10 {
     static String input = """
