@@ -58,8 +58,8 @@ public class Day12 {
             abcccaacaaaaaccccccaaaaaaaaaaaaaaaaaaacccccaacccccccccccccccccccccccccccccccccaaaaa""";
 
     public static void main(String... args) {
-        String[] data = testInput.split("\n");
-        Point start = new Point(-1, -1);
+        String[] data = input.split("\n");
+        List<Point> starts = new ArrayList<>();
         Point end  = new Point(-1, -1);;
 
         int[][] heightMap = new int[data.length][data[0].length()];
@@ -69,9 +69,12 @@ public class Day12 {
 
                 if(heights[y] >= 'a' && heights[y] <= 'z') {
                     heightMap[x][y] = heights[y] - 'a';
+                    if(heightMap[x][y] == 0) {
+                        starts.add(new Point(x, y));
+                    }
                 } else if(heights[y] == 'S') {
                     heightMap[x][y] = '0';
-                    start = new Point(x, y);
+                    starts.add(new Point(x, y));
                 } else {
                     heightMap[x][y] = 25;
                     end = new Point(x, y);
@@ -79,28 +82,36 @@ public class Day12 {
             }
         }
 
+        List<Integer> options = new ArrayList<>();
+        for(Point start : starts) {
+            Set<Point> previouslyVisited = new HashSet<>();
+            Set<Point> currentLevel = new HashSet<>();
+            Set<Point> nextLevel = new HashSet<>();
+            currentLevel.add(start);
+            int level = 0;
 
+            gotoFun:
+            while (true) {
+                for (Point p : currentLevel) {
 
-        Set<Point> previouslyVisited = new HashSet<>();
-        Set<Point> currentLevel = new HashSet<>();
-        Set<Point> nextLevel = new HashSet<>();
-        currentLevel.add(start);
-        int level = 0;
-
-        gotoFun: while(true) {
-            for(Point p : currentLevel) {
-                System.out.println(level + " " + p);
-               if(p.equals(end)) {
-                   break gotoFun;
-               }
-               nextLevel.addAll(p.validRoutes(heightMap).stream().filter(x -> !previouslyVisited.contains(x)).toList());
-               previouslyVisited.add(p);
+                    if (p.equals(end)) {
+                        break gotoFun;
+                    }
+                    nextLevel.addAll(p.validRoutes(heightMap).stream().filter(x -> !previouslyVisited.contains(x)).toList());
+                    previouslyVisited.add(p);
+                }
+                level++;
+                currentLevel = nextLevel;
+                nextLevel = new HashSet<>();
+                if(currentLevel.size() == 0) {
+                    level = 1000;
+                    break gotoFun;
+                }
             }
-            level++;
-            currentLevel = nextLevel;
-            nextLevel = new HashSet<>();
+            options.add(level);
         }
-        System.out.println(level);
+        System.out.println(options);
+        System.out.println(options.stream().sorted().findFirst());
     }
 
 
