@@ -7,9 +7,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Day13 {
     static String input = """
@@ -510,8 +507,8 @@ public class Day13 {
         List<Object> ordered = Arrays.stream(input.split("\n")).filter(x -> !x.isBlank())
                 .map(Day13::eval)
                 .sorted((x, y) -> inOrder(y, x).ordering)
-
                 .toList();
+
         int index = 1;
         int total = 1;
         for (Object i : ordered) {
