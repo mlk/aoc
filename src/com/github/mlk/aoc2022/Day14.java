@@ -68,11 +68,7 @@ public class Day14 {
 
             map.set(sand.point, MapPart.SAND);
 
-            if(sand.point.equals(new Point(500,0))){
-                return false;
-            }
-
-            return true;
+            return !sand.point.equals(new Point(500, 0));
 
         } catch(SandOutOfBoundsException e) {
             return false;
@@ -82,6 +78,11 @@ public class Day14 {
     record Point(int x, int y) {
         Point add(Point p) {
             return new Point(x + p.x, y + p.y);
+        }
+
+        static Point parse(String point) {
+            String[] xy = point.split(",");
+            return new Point(Integer.parseInt(xy[0].trim()), Integer.parseInt(xy[1].trim()));
         }
     }
 
@@ -146,29 +147,29 @@ public class Day14 {
         }
     }
 
-    record Wall(List<WallPoint> points) {
+    record Wall(List<Point> points) {
         static Wall parse(String line) {
             String[] points = line.split(" -> ");
-            List<WallPoint> wallPoints = new ArrayList<>();
+            List<Point> wallPoints = new ArrayList<>();
             for(String point : points) {
-                wallPoints.add(WallPoint.parse(point));
+                wallPoints.add(Point.parse(point));
             }
 
             return new Wall(wallPoints);
         }
 
         int maxX() {
-            return points.stream().mapToInt(WallPoint::x).max().getAsInt();
+            return points.stream().mapToInt(Point::x).max().getAsInt();
         }
 
         int maxY() {
-            return points.stream().mapToInt(v -> v.y).max().getAsInt();
+            return points.stream().mapToInt(Point::y).max().getAsInt();
         }
 
         public void drawWalls(Map map) {
-            WallPoint from = points().get(0);
+            Point from = points().get(0);
             for(int idx = 1; idx < points().size(); idx++) {
-                WallPoint to = points().get(idx);
+                Point to = points().get(idx);
                 int minX = Math.min(from.x(), to.x());
                 int maxX = Math.max(from.x(), to.x());
                 int minY = Math.min(from.y(), to.y());
@@ -180,13 +181,6 @@ public class Day14 {
                 }
                 from = to;
             }
-        }
-    }
-
-    record WallPoint(int x, int y) {
-        static WallPoint parse(String point) {
-            String[] xy = point.split(",");
-            return new WallPoint(Integer.parseInt(xy[0].trim()), Integer.parseInt(xy[1].trim()));
         }
     }
 }
