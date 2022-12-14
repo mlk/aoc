@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.github.mlk.aoc2022.Day14Data.input;
 import static com.github.mlk.aoc2022.Day14Data.testInput;
 
 public class Day14 {
@@ -12,7 +13,7 @@ public class Day14 {
     public static void main(String... arg) {
         WallSet walls = WallSet.parse(testInput);
 
-        Map map = new Map(walls.maxX(), walls.maxY(), new HashMap<>());
+        Map map = new Map(walls.maxX(), walls.maxY(), false, new HashMap<>());
 
         for(Wall wall : walls.walls()) {
             wall.drawWalls(map);
@@ -21,17 +22,17 @@ public class Day14 {
         output(map, 494, 0, 503, 11);
 
 
-        int index = 0;
+        int index = 1;
         while(simulate(new Sand(new Point(500, 0)), map)) {
             index++;
         }
 
         System.out.println(index);
 
-        output(map, 494, 0, 503, 9);
+        output(map, 480, 0, 520, 12);
     }
 
-    record Map(int maxX, int maxY, HashMap<Point, MapPart> map) {
+    record Map(int maxX, int maxY, boolean boundsChecking, HashMap<Point, MapPart> map) {
         void set(Point p, MapPart part) {
             map.put(p, part);
         }
@@ -45,7 +46,11 @@ public class Day14 {
         }
 
         public boolean inBound(Point p) {
-            return p.x >= 0 && p.x <= maxX && p.y >= 0 && p.y<=maxY;
+            if(boundsChecking) {
+                return p.x >= 0 && p.x <= maxX && p.y >= 0 && p.y<=maxY;
+            } else {
+                return true;
+            }
         }
     }
 
@@ -60,9 +65,15 @@ public class Day14 {
                 }
             } while (fallenTo != null);
 
+
             map.set(sand.point, MapPart.SAND);
 
+            if(sand.point.equals(new Point(500,0))){
+                return false;
+            }
+
             return true;
+
         } catch(SandOutOfBoundsException e) {
             return false;
         }
