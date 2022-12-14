@@ -11,9 +11,9 @@ import static com.github.mlk.aoc2022.Day14Data.testInput;
 public class Day14 {
 
     public static void main(String... arg) {
-        WallSet walls = WallSet.parse(testInput);
+        WallSet walls = WallSet.parse(input);
 
-        Map map = new Map(walls.maxX(), walls.maxY(), false, new HashMap<>());
+        Map map = new Map(walls.maxX(), walls.maxY(), true, new HashMap<>());
 
         for(Wall wall : walls.walls()) {
             wall.drawWalls(map);
@@ -21,10 +21,14 @@ public class Day14 {
 
         output(map, 494, 0, 503, 11);
 
-
-        int index = 1;
-        while(simulate(new Sand(new Point(500, 0)), map)) {
-            index++;
+        int index = 0;
+        Point startLocation = new Point(500, 0);
+        try {
+            do {
+                index++;
+            } while(!simulate(new Sand(startLocation), map).point().equals(startLocation));
+        } catch(SandOutOfBoundsException e) {
+            index--;
         }
 
         System.out.println(index);
@@ -38,6 +42,10 @@ public class Day14 {
         }
 
         MapPart get(Point p) {
+            if(!inBound(p)) {
+                throw new SandOutOfBoundsException();
+            }
+
             if(p.y() >= maxY + 2) {
                 return MapPart.WALL;
             }
@@ -54,25 +62,18 @@ public class Day14 {
         }
     }
 
-    private static boolean simulate(Sand sand, Map map) {
-        try {
-            Point fallenTo = null;
-            do {
-                fallenTo = sand.fall(map);
+    private static Sand simulate(Sand sand, Map map) {
+        Point fallenTo = null;
+        do {
+            fallenTo = sand.fallsTo(map);
 
-                if (fallenTo != null) {
-                    sand = new Sand(fallenTo);
-                }
-            } while (fallenTo != null);
+            if (fallenTo != null) {
+                sand = new Sand(fallenTo);
+            }
+        } while (fallenTo != null);
 
-
-            map.set(sand.point, MapPart.SAND);
-
-            return !sand.point.equals(new Point(500, 0));
-
-        } catch(SandOutOfBoundsException e) {
-            return false;
-        }
+        map.set(sand.point, MapPart.SAND);
+        return sand;
     }
 
     record Point(int x, int y) {
@@ -90,13 +91,11 @@ public class Day14 {
     record Sand(Point point) {
         static Point[]  dirs = {new Point(0, 1), new Point(-1, 1), new Point(1, 1)};
 
-        Point fall(Map map) {
+        Point fallsTo(Map map) {
             for(Point newLocation : Arrays.stream(dirs)
                     .map(x -> x.add(point))
                     .toList()) {
-                if(!map.inBound(newLocation)) {
-                    throw new SandOutOfBoundsException();
-                }
+
                 if(!map.get(newLocation).blocker) {
                     return newLocation;
                 }
