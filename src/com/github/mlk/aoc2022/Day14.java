@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Day14 {
-    static String testInput = """
-            <retracted>""";
+import static com.github.mlk.aoc2022.Day14Data.testInput;
 
-    static String input = """
-            <retracted>""";
+public class Day14 {
 
     public static void main(String... arg) {
-        WallSet walls = WallSet.parse(input);
+        WallSet walls = WallSet.parse(testInput);
 
-        MapPart[][] map = new MapPart[walls.maxY() + 1][walls.maxX() + 1];
+        Map map = new Map(new MapPart[walls.maxY() + 1][walls.maxX() + 1]);
 
-        for(int idx = 0; idx < map.length; idx++) {
-            Arrays.fill(map[idx], MapPart.AIR);
+        for(int idx = 0; idx < map.map.length; idx++) {
+            Arrays.fill(map.map[idx], MapPart.AIR);
         }
 
         for(Wall wall : walls.walls()) {
@@ -37,7 +34,21 @@ public class Day14 {
         output(map, 494, 0, 503, 9);
     }
 
-    private static boolean simulate(Sand sand, MapPart[][] map) {
+    record Map(MapPart[][] map) {
+        void set(int x, int y, MapPart part) {
+            map[y][x] = part;
+        }
+
+        MapPart get(int x, int y) {
+            return map[y][x];
+        }
+
+        public boolean inBound(Point p) {
+            return p.x >= 0 && p.x < map[0].length && p.y >= 0 && p.y<map.length;
+        }
+    }
+
+    private static boolean simulate(Sand sand, Map map) {
         try {
             Point fallenTo = null;
             do {
@@ -48,7 +59,7 @@ public class Day14 {
                 }
             } while (fallenTo != null);
 
-            map[sand.point.y][sand.point.x] = MapPart.SAND;
+            map.set(sand.point.x, sand.point.y, MapPart.SAND);
 
             return true;
         } catch(SandOutOfBoundsException e) {
@@ -71,14 +82,14 @@ public class Day14 {
     record Sand(Point point) {
         static Point[]  dirs = {new Point(0, 1), new Point(-1, 1), new Point(1, 1)};
 
-        Point fall(MapPart[][] map) {
+        Point fall(Map map) {
             for(Point newLocation : Arrays.stream(dirs)
                     .map(x -> x.add(point))
                     .toList()) {
-                if(!newLocation.inBounds(map)) {
+                if(!map.inBound(newLocation)) {
                     throw new SandOutOfBoundsException();
                 }
-                if(!map[newLocation.y()][newLocation.x()].blocker) {
+                if(!map.get(newLocation.x(), newLocation.y()).blocker) {
                     return newLocation;
                 }
             }
@@ -89,10 +100,10 @@ public class Day14 {
 
     static class SandOutOfBoundsException extends RuntimeException {}
 
-    static void output(MapPart[][] map, int startX, int startY, int endX, int endY) {
+    static void output(Map map, int startX, int startY, int endX, int endY) {
         for(int y = startY; y<=endY; y++) {
             for(int x = startX; x<=endX; x++) {
-                System.out.print(map[y][x].display);
+                System.out.print(map.get(x, y).display);
             }
             System.out.println();
         }
@@ -147,7 +158,7 @@ public class Day14 {
             return points.stream().mapToInt(v -> v.y).max().getAsInt();
         }
 
-        public void drawWalls(MapPart[][] map) {
+        public void drawWalls(Map map) {
             WallPoint from = points().get(0);
             for(int idx = 1; idx < points().size(); idx++) {
                 WallPoint to = points().get(idx);
@@ -157,7 +168,7 @@ public class Day14 {
                 int maxY = Math.max(from.y(), to.y());
                 for(int x = minX; x<=maxX; x++) {
                     for (int y = minY; y <=maxY; y++) {
-                        map[y][x] = MapPart.WALL;
+                        map.set(x, y, MapPart.WALL);
                     }
                 }
                 from = to;
