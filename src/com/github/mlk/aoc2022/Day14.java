@@ -2,6 +2,7 @@ package com.github.mlk.aoc2022;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.github.mlk.aoc2022.Day14Data.testInput;
@@ -11,17 +12,13 @@ public class Day14 {
     public static void main(String... arg) {
         WallSet walls = WallSet.parse(testInput);
 
-        Map map = new Map(new MapPart[walls.maxY() + 1][walls.maxX() + 1]);
-
-        for(int idx = 0; idx < map.map.length; idx++) {
-            Arrays.fill(map.map[idx], MapPart.AIR);
-        }
+        Map map = new Map(walls.maxX(), walls.maxY(), new HashMap<>());
 
         for(Wall wall : walls.walls()) {
             wall.drawWalls(map);
         }
 
-        output(map, 494, 0, 503, 9);
+        output(map, 494, 0, 503, 11);
 
 
         int index = 0;
@@ -34,17 +31,21 @@ public class Day14 {
         output(map, 494, 0, 503, 9);
     }
 
-    record Map(MapPart[][] map) {
-        void set(int x, int y, MapPart part) {
-            map[y][x] = part;
+    record Map(int maxX, int maxY, HashMap<Point, MapPart> map) {
+        void set(Point p, MapPart part) {
+            map.put(p, part);
         }
 
-        MapPart get(int x, int y) {
-            return map[y][x];
+        MapPart get(Point p) {
+            if(p.y() >= maxY + 2) {
+                return MapPart.WALL;
+            }
+
+            return map.getOrDefault(p, MapPart.AIR);
         }
 
         public boolean inBound(Point p) {
-            return p.x >= 0 && p.x < map[0].length && p.y >= 0 && p.y<map.length;
+            return p.x >= 0 && p.x <= maxX && p.y >= 0 && p.y<=maxY;
         }
     }
 
@@ -59,7 +60,7 @@ public class Day14 {
                 }
             } while (fallenTo != null);
 
-            map.set(sand.point.x, sand.point.y, MapPart.SAND);
+            map.set(sand.point, MapPart.SAND);
 
             return true;
         } catch(SandOutOfBoundsException e) {
@@ -70,11 +71,6 @@ public class Day14 {
     record Point(int x, int y) {
         Point add(Point p) {
             return new Point(x + p.x, y + p.y);
-        }
-
-        public boolean inBounds(MapPart[][] map) {
-
-            return x >= 0 && x < map[0].length && y >= 0 && y<map.length;
         }
     }
 
@@ -89,7 +85,7 @@ public class Day14 {
                 if(!map.inBound(newLocation)) {
                     throw new SandOutOfBoundsException();
                 }
-                if(!map.get(newLocation.x(), newLocation.y()).blocker) {
+                if(!map.get(newLocation).blocker) {
                     return newLocation;
                 }
             }
@@ -103,7 +99,7 @@ public class Day14 {
     static void output(Map map, int startX, int startY, int endX, int endY) {
         for(int y = startY; y<=endY; y++) {
             for(int x = startX; x<=endX; x++) {
-                System.out.print(map.get(x, y).display);
+                System.out.print(map.get(new Point(x, y)).display);
             }
             System.out.println();
         }
@@ -168,7 +164,7 @@ public class Day14 {
                 int maxY = Math.max(from.y(), to.y());
                 for(int x = minX; x<=maxX; x++) {
                     for (int y = minY; y <=maxY; y++) {
-                        map.set(x, y, MapPart.WALL);
+                        map.set(new Point(x, y), MapPart.WALL);
                     }
                 }
                 from = to;
