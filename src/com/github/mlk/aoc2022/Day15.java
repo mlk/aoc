@@ -1,14 +1,15 @@
 package com.github.mlk.aoc2022;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day15 {
 
-    static int careY = 2000000;
+    static int careY = 4000000;
 
     record Point(int x, int y) {
         static Point parse(String value) {
@@ -24,46 +25,85 @@ public class Day15 {
             return Math.abs(x - other.x()) + Math.abs(y - other.y());
         }
 
-        List<Point> circle(int size) {
-            List<Point> points = new ArrayList<>();
+        public long freq() {
+            return ((long)x) * 4000000 + y;
+        }
+    }
 
-            for(int cx = x - size; cx < x + size; cx++) {
-                //for(int cy = y - size; cy < y + size; cy++) {
-                int cy = careY;
-                    Point p = new Point(cx, cy);
 
-                    if(manhattanDistance(p) <= size) {
-                        points.add(p);
-                    }
-                //}
+    record Sensor(Point location, int size) {
+        Set<Point> getPerimeter() {
+
+            Set<Point> points = new HashSet<>();
+
+            Point leftStart = new Point(location().x() - (size+1), location.y);
+            Point rightStart = new Point(location().x() + (size+1), location.y);
+
+            Point leftUpStart = new Point(location().x() - (size+1), location.y);
+            Point rightUpStart = new Point(location().x() + (size+1), location.y);
+
+
+            Point dowRight = new Point(1, 1);
+            Point dowLeft = new Point(-1, 1);
+            Point upRight = new Point(1, -1);
+            Point upLeft = new Point(-1, -1);
+            while(leftStart.x != location.x) {
+                add(points, leftStart);
+                add(points, rightStart);
+                leftStart = leftStart.add(dowRight);
+                rightStart = rightStart.add(dowLeft);
+
+                add(points, leftUpStart);
+                add(points, rightUpStart);
+                leftUpStart = leftUpStart.add(upRight);
+                rightUpStart = rightUpStart.add(upLeft);
             }
+            add(points, leftStart);
+            add(points, rightStart);
+            add(points, leftUpStart);
+            add(points, rightUpStart);
             return points;
+        }
+
+        static void add(Set<Point> points, Point x) {
+            if(x.x() > 0 && x.x < careY && x.y > 0 && x.y < careY) {
+               points.add(x);
+            }
         }
     }
 
     public static void main(String... arg) {
+
         String regex = "Sensor at (.*): closest beacon is at (.*)";
         Pattern pattern = Pattern.compile(regex);
 
-        Map map = new Map(new HashMap<>());
+
+
+        System.out.println("Building");
+        List<Sensor> sensors = new ArrayList<>();
+        List<Point> beacons = new ArrayList<>();
 
         for(String line : Day15Data.data.split("\n")) {
+
             Matcher m = pattern.matcher(line);
             m.find();
             Point sensor = Point.parse(m.group(1));
             Point beacon = Point.parse(m.group(2));
             int size = sensor.manhattanDistance(beacon);
-            for (Point empty : sensor.circle(size)) {
-                map.empty(empty);
-            }
-            map.map.put(sensor, Thingie.SENSOR);
-            map.map.put(beacon, Thingie.BEACON);
+            sensors.add(new Sensor(sensor, size));
+            beacons.add(beacon);
+
         }
 
-        List<Thingie> line = map.getLine(careY);
-        System.out.println(line.size());
-        System.out.println(line.stream().filter(x -> !x.equals(Thingie.UNKNOWN) && !x.equals(Thingie.BEACON) ).count());
 
+
+        sensors.stream().flatMap(x -> x.getPerimeter().stream())
+                .collect(Collectors.toSet())
+                .forEach(p -> {
+            if (sensors.stream().noneMatch(s -> s.location().manhattanDistance(p) <= s.size())) {
+                System.out.println(p + " " + p.freq());
+            }
+        });
     }
 
     enum Thingie {
@@ -78,6 +118,19 @@ public class Day15 {
     record Map(HashMap<Point, Thingie> map) {
         void empty(Point point) {
             map.putIfAbsent(point, Thingie.EMPTY);
+        }
+
+        List<Point> getGetUnknownForLine(int y) {
+            int minX = 0; //minX();
+            int maxX = careY; //maxX();
+            List<Point> unknowns = new ArrayList<>();
+            for(int x =minX; x<= maxX; x++) {
+                Point p = new Point(x, y);
+                if(!map.containsKey(p)) {
+                    unknowns.add(p);
+                }
+            }
+            return unknowns;
         }
 
         List<Thingie> getLine(int y) {
