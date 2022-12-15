@@ -1,15 +1,13 @@
 package com.github.mlk.aoc2022;
 
 import java.util.*;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Day15 {
 
-    static int careY = 4000000;
+    static int careAbout = 4000000;
 
     record Point(int x, int y) {
         static Point parse(String value) {
@@ -30,56 +28,50 @@ public class Day15 {
         }
     }
 
-
     record Sensor(Point location, int size) {
         Set<Point> getPerimeter() {
 
             Set<Point> points = new HashSet<>();
 
-            Point leftStart = new Point(location().x() - (size+1), location.y);
-            Point rightStart = new Point(location().x() + (size+1), location.y);
+            Point leftDownPoint = new Point(location().x() - (size+1), location.y);
+            Point rightDownPoint = new Point(location().x() + (size+1), location.y);
 
-            Point leftUpStart = new Point(location().x() - (size+1), location.y);
-            Point rightUpStart = new Point(location().x() + (size+1), location.y);
+            Point leftUpPoint = new Point(location().x() - (size+1), location.y);
+            Point rightUpPoint = new Point(location().x() + (size+1), location.y);
 
-
-            Point dowRight = new Point(1, 1);
-            Point dowLeft = new Point(-1, 1);
+            Point downRight = new Point(1, 1);
+            Point downLeft = new Point(-1, 1);
             Point upRight = new Point(1, -1);
             Point upLeft = new Point(-1, -1);
-            while(leftStart.x != location.x) {
-                add(points, leftStart);
-                add(points, rightStart);
-                leftStart = leftStart.add(dowRight);
-                rightStart = rightStart.add(dowLeft);
+            while(leftDownPoint.x != location.x) {
+                add(points, leftDownPoint);
+                add(points, rightDownPoint);
+                leftDownPoint = leftDownPoint.add(downRight);
+                rightDownPoint = rightDownPoint.add(downLeft);
 
-                add(points, leftUpStart);
-                add(points, rightUpStart);
-                leftUpStart = leftUpStart.add(upRight);
-                rightUpStart = rightUpStart.add(upLeft);
+                add(points, leftUpPoint);
+                add(points, rightUpPoint);
+                leftUpPoint = leftUpPoint.add(upRight);
+                rightUpPoint = rightUpPoint.add(upLeft);
             }
-            add(points, leftStart);
-            add(points, rightStart);
-            add(points, leftUpStart);
-            add(points, rightUpStart);
+            add(points, leftDownPoint);
+            add(points, rightDownPoint);
+            add(points, leftUpPoint);
+            add(points, rightUpPoint);
             return points;
         }
 
         static void add(Set<Point> points, Point x) {
-            if(x.x() > 0 && x.x < careY && x.y > 0 && x.y < careY) {
+            if(x.x() > 0 && x.x < careAbout && x.y > 0 && x.y < careAbout) {
                points.add(x);
             }
         }
     }
 
     public static void main(String... arg) {
-
         String regex = "Sensor at (.*): closest beacon is at (.*)";
         Pattern pattern = Pattern.compile(regex);
 
-
-
-        System.out.println("Building");
         List<Sensor> sensors = new ArrayList<>();
         List<Point> beacons = new ArrayList<>();
 
@@ -95,8 +87,6 @@ public class Day15 {
 
         }
 
-
-
         sensors.stream().flatMap(x -> x.getPerimeter().stream())
                 .collect(Collectors.toSet())
                 .forEach(p -> {
@@ -106,55 +96,5 @@ public class Day15 {
         });
     }
 
-    enum Thingie {
-        UNKNOWN('.'), SENSOR('S'), BEACON('B'), EMPTY('#');
-        final char display;
-
-        Thingie(char display) {
-            this.display = display;
-        }
-    }
-
-    record Map(HashMap<Point, Thingie> map) {
-        void empty(Point point) {
-            map.putIfAbsent(point, Thingie.EMPTY);
-        }
-
-        List<Point> getGetUnknownForLine(int y) {
-            int minX = 0; //minX();
-            int maxX = careY; //maxX();
-            List<Point> unknowns = new ArrayList<>();
-            for(int x =minX; x<= maxX; x++) {
-                Point p = new Point(x, y);
-                if(!map.containsKey(p)) {
-                    unknowns.add(p);
-                }
-            }
-            return unknowns;
-        }
-
-        List<Thingie> getLine(int y) {
-            int minX = minX();
-            int maxX = maxX();
-
-            List<Thingie> items = new ArrayList<>();
-            for(int x =minX; x<= maxX; x++) {
-                items.add(get(new Point(x, y)));
-            }
-            return items;
-        }
-
-        Thingie get(Point xy) {
-            return map.getOrDefault(xy, Thingie.UNKNOWN);
-        }
-
-        int minX() {
-            return map.keySet().stream().mapToInt(x -> x.x).min().getAsInt();
-        }
-
-        int maxX() {
-            return map.keySet().stream().mapToInt(x -> x.x).max().getAsInt();
-        }
-    }
 }
 
