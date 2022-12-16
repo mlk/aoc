@@ -79,7 +79,6 @@ public class Day16 {
                 distances.put(Route.create(r, rooms.get(kid)), 1);
             }
         }
-        System.out.println(distances.size());
 
         for(int i = 0; i<5; i++) {
 
@@ -97,119 +96,69 @@ public class Day16 {
 
         List<Room> roomsToVisit = rooms.values().stream().filter(x -> x.flow > 0).sorted(reverseOrder(Comparator.comparingInt(x -> x.flow))).toList();
 
-
         Room startingRoom = rooms.get("AA");
-        Leaf path = Leaf.create2(null, startingRoom, 30, roomsToVisit);
+        Leaf path = Leaf.create2(null, startingRoom, 30, roomsToVisit, Action.VALVE, 0);
 
         System.out.println(path.max());
-
-        /*Executor executor = Executors.newFixedThreadPool(5);
-
-        //Leaf tree = Leaf.create(null, rooms.get("AA"), 30, executor);
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        //System.out.print(tree.max());
-
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                System.out.print(tree.max());
-            }
-        });
-
-         */
     }
 
-    record Leaf(Leaf parent, Room room, int timeRemaining, int leafFlow, List<Leaf> children) {
+    enum Action {WALK, VALVE}
 
-        static Leaf create2(Leaf parent, Room room, int timeRemaining, List<Room> toVisit) {
-            int runningTotal = parent == null ? 0 : parent.leafFlow();
+    record Leaf(Leaf parent, Room room, int timeRemaining, int leafFlow, List<Leaf> children, Action action, int stepsRemaining) {
 
-            List<Leaf> children = new ArrayList<>();
-            int flow = room.flow * timeRemaining;
+        static Leaf create2(Leaf parent, Room room, int timeRemaining, List<Room> toVisit, Action action, int stepsRemaining) {
 
-            Leaf current = new Leaf(parent, room, timeRemaining, runningTotal + flow, children);
-
-            for (Room childRoom : toVisit) {
-
-                int distance = distances.get(Route.create(room, childRoom));
-                if (distance < timeRemaining) {
-                    List<Room> leftToVist = new ArrayList<>(toVisit);
-                    leftToVist.remove(childRoom);
-                    children.add(create2(current, childRoom, timeRemaining - distance - 1, leftToVist));
-                }
-            }
-
-            return current;
-        }
-
-        static Leaf create(Leaf parent, Room room, int timeRemaining) {
-
-            boolean valveAlreadyOpen = room.flow == 0 || (parent != null && parent.valveOpen(room));
 
             int runningTotal = parent == null ? 0 : parent.leafFlow();
 
-            if (!valveAlreadyOpen) timeRemaining--;
+            //System.out.println(room.name + " " + action + stepsRemaining + " " + runningTotal + " " + timeRemaining);
 
+            Leaf current;
+            if(action == Action.VALVE) {
+                List<Leaf> children = new ArrayList<>();
+                int flow = room.flow * (timeRemaining - 1);
+                if(room.flow > 0) timeRemaining--;
 
-            List<Leaf> children = new ArrayList<>();
-            int flow = valveAlreadyOpen ? 0 : room.flow * timeRemaining;
+                current = new Leaf(parent, room, timeRemaining, runningTotal + flow, children, action, stepsRemaining);
 
-            Leaf current = new Leaf(parent, room, timeRemaining, runningTotal + flow, children);
+                for (Room childRoom : toVisit) {
 
-            if (timeRemaining >= 2) {
-                int tr = timeRemaining;
-                for (String childRoom : room.leadsTo()) {
-                    Room kid = rooms.get(childRoom);
-                    if (current.count(kid, 0) < 3) {
-                        children.add(create(current, kid, tr - 1));
+                    int distance = distances.get(Route.create(room, childRoom));
+                    if (distance <= (timeRemaining - 1)) {
+                        List<Room> leftToVist = new ArrayList<>(toVisit);
+                        leftToVist.remove(childRoom);
+
+                        children.add(create2(current, childRoom, timeRemaining, leftToVist, Action.WALK, distance));
                     }
                 }
-            }
+            } else {
+                List<Leaf> children = new ArrayList<>();
+                current = new Leaf(parent, room, timeRemaining - 1, runningTotal, children, action, stepsRemaining - 1);
+                if(timeRemaining > 0) {
+                    if (stepsRemaining - 1 == 0) {
+                        children.add(create2(current, room, timeRemaining - 1, toVisit, Action.VALVE, 0));
+                    } else {
+                        children.add(create2(current, room, timeRemaining - 1, toVisit, Action.WALK, stepsRemaining - 1));
+                    }
+                }
 
+            }
             return current;
-        }
-
-        int count(Room checking, int start) {
-            int count = start;
-            if(this.parent != null) {
-                count = parent().count(room, start);
-            }
-
-            if(room == checking) {
-                return count + 1;
-            }
-            return count;
         }
 
         int max() {
+            /*char[] spaces = new char[tab()];
+            Arrays.fill(spaces, ' ');
+            System.out.println(new String(spaces) + room.name + " - " + action + " " + leafFlow);*/
             if(children.isEmpty()) {
                 return leafFlow;
             }
             return children.stream().mapToInt(Leaf::max).max().getAsInt();
         }
 
-        int count(int value) {
-            if(parent != null) {
-                return parent.count(value + 1);
-            }
-            return value;
-        }
-
-        boolean valveOpen(Room room) {
-            if(this.room == room) {
-                return true;
-            } else if(this.parent != null) {
-                return this.parent.valveOpen(room);
-            }
-            return false;
+        int tab() {
+            if(parent == null) return 0;
+            return parent().tab() + 1;
         }
     }
 }

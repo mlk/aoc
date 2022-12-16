@@ -87,6 +87,7 @@ public class Day15 {
 
         }
 
+        long start = System.currentTimeMillis();
         sensors.stream().flatMap(x -> x.getPerimeter().stream())
                 .collect(Collectors.toSet())
                 .forEach(p -> {
@@ -94,6 +95,7 @@ public class Day15 {
                 System.out.println(p + " " + p.freq());
             }
         });
+        System.out.println(System.currentTimeMillis() - start);
     }
 
 }
