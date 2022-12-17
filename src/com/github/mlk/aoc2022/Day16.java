@@ -1,5 +1,6 @@
 package com.github.mlk.aoc2022;
 
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -12,7 +13,7 @@ import static java.util.Collections.reverseOrder;
 public class Day16 {
 
 
-    record Room (String name, int flow, List<String> leadsTo) {
+    record Room (String name, int flow, List<String> leadsTo, int id) {
 
     }
 
@@ -65,13 +66,15 @@ public class Day16 {
         String regex = "Valve (..) has flow rate=(\\d+); tunnels? leads? to valves? (.*)";
         Pattern pattern = Pattern.compile(regex);
 
+        int index = 0;
         for(String line : Day16Data.data.split("\n")) {
             Matcher matcher = pattern.matcher(line);
             matcher.find();
             String name = matcher.group(1);
             int flow = Integer.parseInt(matcher.group(2));
             String[] leadsTo = matcher.group(3).split(", ");
-            rooms.put(name, new Room(name, flow, List.of(leadsTo)));
+            rooms.put(name, new Room(name, flow, List.of(leadsTo), index));
+            index++;
         }
 
         for(Room r : rooms.values()) {
@@ -95,62 +98,143 @@ public class Day16 {
         }
 
         List<Room> roomsToVisit = rooms.values().stream().filter(x -> x.flow > 0).sorted(reverseOrder(Comparator.comparingInt(x -> x.flow))).toList();
+        BitSet vistedTheRoom = new BitSet();
+        System.out.println(vistedTheRoom.get(0));
 
         Room startingRoom = rooms.get("AA");
-        Leaf path = Leaf.create2(null, startingRoom, 30, roomsToVisit, Action.VALVE, 0);
+        Leaf path = Leaf.create2(null, 27, vistedTheRoom, roomsToVisit, new Person(startingRoom, Action.VALVE, 0), new Person(startingRoom, Action.VALVE, 0));
 
         System.out.println(path.max());
     }
 
-    enum Action {WALK, VALVE}
+    enum Action {WALK, VALVE, IDLE}
 
-    record Leaf(Leaf parent, Room room, int timeRemaining, int leafFlow, List<Leaf> children, Action action, int stepsRemaining) {
+    static Room EMPTY = new Room("<EMPTY>", 0, List.of(), -1);
 
-        static Leaf create2(Leaf parent, Room room, int timeRemaining, List<Room> toVisit, Action action, int stepsRemaining) {
+    record Person(Room room, Action action, int stepsRemaining) {
+        int flow(int timeRemaining) {
+            if(timeRemaining <= 0) return 0;
 
+            if(action == Action.VALVE) {
+                return room.flow * (timeRemaining);
+            }// 2209
+
+            return 0;
+        }
+
+
+
+        List<Person> nextStates(int timeRemaining, List<Room> toVisit, BitSet bitSet, String tabs) {
+            if(action == Action.IDLE) {
+                //System.out.println(tabs + " idle");
+                return List.of(new Person(EMPTY, Action.IDLE, 0));
+            }
+            if(action == Action.WALK) {
+                if(stepsRemaining -1 != 0) {
+                    return List.of(new Person(room, Action.WALK, stepsRemaining - 1));
+                } else {
+                    return List.of(new Person(room, Action.VALVE, 0));
+                }
+            }
+
+            List<Person> nextStep = new ArrayList<>();
+
+            for (Room childRoom : toVisit) {
+                //System.out.println(childRoom);
+                //System.out.println(bitSet.get(idx));
+                if(!bitSet.get(childRoom.id) && room != childRoom) {
+                    //System.out.println(room.name + " " + childRoom.name);
+                    int distance = distances.get(Route.create(room, childRoom));
+                    if (distance <= (timeRemaining - 1)) {
+
+                        nextStep.add(new Person(childRoom, Action.WALK, distance));
+                    }
+                }
+            }
+            if(nextStep.isEmpty()) {
+                //System.out.println(tabs + " idle");
+                return List.of(new Person(EMPTY, Action.IDLE, 0));
+            }
+            return nextStep;
+        }
+    }
+
+    record Leaf(Leaf parent, int timeRemaining, int leafFlow, List<Leaf> children, Person me, Person elly) {
+
+        static Leaf create2(Leaf parent, int timeRemaining, BitSet vistedTheRoom, List<Room> toVisit, Person me, Person elly) {
 
             int runningTotal = parent == null ? 0 : parent.leafFlow();
 
-            //System.out.println(room.name + " " + action + stepsRemaining + " " + runningTotal + " " + timeRemaining);
+            //System.out.println(me.room.name + " " + me.action + me.stepsRemaining + " " + runningTotal + " " + timeRemaining);
+            //System.out.println(elly.room.name + " " + elly.action + elly.stepsRemaining + " " + runningTotal + " " + timeRemaining);
+            // Cheating here a little, only the first call can be in a zero time location.
 
-            Leaf current;
-            if(action == Action.VALVE) {
-                List<Leaf> children = new ArrayList<>();
-                int flow = room.flow * (timeRemaining - 1);
-                if(room.flow > 0) timeRemaining--;
+            timeRemaining--;
 
-                current = new Leaf(parent, room, timeRemaining, runningTotal + flow, children, action, stepsRemaining);
+            runningTotal += me.flow(timeRemaining);
+            runningTotal += elly.flow(timeRemaining);
 
-                for (Room childRoom : toVisit) {
+            List<Leaf> children = new ArrayList<>();
 
-                    int distance = distances.get(Route.create(room, childRoom));
-                    if (distance <= (timeRemaining - 1)) {
-                        List<Room> leftToVist = new ArrayList<>(toVisit);
-                        leftToVist.remove(childRoom);
+            Leaf current = new Leaf(parent, timeRemaining, runningTotal, children, me, elly);
 
-                        children.add(create2(current, childRoom, timeRemaining, leftToVist, Action.WALK, distance));
+            if(timeRemaining > 0) {
+                for (Person newMe : me.nextStates(timeRemaining, toVisit, vistedTheRoom, "")) {
+                    BitSet bitSet = (BitSet) vistedTheRoom.clone();
+                    int idx = newMe.room.id;
+                    if(idx != -1) {
+                        bitSet.set(idx);
+                    }
+                    for (Person newEl : elly.nextStates(timeRemaining, toVisit, bitSet, "")) {
+                        //System.out.println(current.tabString() +  "< " + me.room.name + " " + elly.room.name);
+                        //System.out.println(current.tabString() + "> " + newMe.room.name + " " + newEl.room.name + " - " + current.leafFlow);
+                        BitSet bitSet2 = (BitSet) bitSet.clone();
+                        idx = newEl.room.id;
+                        if(idx != -1) {
+                            bitSet2.set(idx);
+                        }
+
+                        if(newEl.room == EMPTY && newMe.room == EMPTY) {
+                            //System.out.println("w00t" + current.leafFlow);
+                        } else {
+                            Leaf l = create2(current, timeRemaining, bitSet2, toVisit, newMe, newEl);
+                            if(parent == null) {
+                                int myMax = l.max();
+                                int max = children.stream().mapToInt(Leaf::max).max().orElse(0);
+                                if(max < myMax){
+                                    children.clear();
+                                    children.add(l);
+                                    System.gc();
+                                }
+
+                            } else {
+
+
+                                children.add(l);
+                            }
+                        }
                     }
                 }
-            } else {
-                List<Leaf> children = new ArrayList<>();
-                current = new Leaf(parent, room, timeRemaining - 1, runningTotal, children, action, stepsRemaining - 1);
-                if(timeRemaining > 0) {
-                    if (stepsRemaining - 1 == 0) {
-                        children.add(create2(current, room, timeRemaining - 1, toVisit, Action.VALVE, 0));
-                    } else {
-                        children.add(create2(current, room, timeRemaining - 1, toVisit, Action.WALK, stepsRemaining - 1));
-                    }
-                }
-
             }
             return current;
         }
 
+        String tabString() {
+            char[] g =new char[tab()];
+            Arrays.fill(g, ' ');
+            return new String(g);
+        }
+
         int max() {
-            /*char[] spaces = new char[tab()];
+            /*
+            char[] spaces = new char[tab()];
             Arrays.fill(spaces, ' ');
-            System.out.println(new String(spaces) + room.name + " - " + action + " " + leafFlow);*/
+            System.out.println(new String(spaces) + me.room.name + " - " + me.action + " " + leafFlow);
+            System.out.println(new String(spaces) + elly.room.name + " - " + elly.action );
+            System.out.println();
+            */
             if(children.isEmpty()) {
+
                 return leafFlow;
             }
             return children.stream().mapToInt(Leaf::max).max().getAsInt();
