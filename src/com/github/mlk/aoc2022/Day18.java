@@ -1,7 +1,9 @@
 package com.github.mlk.aoc2022;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Day18 {
     record Location(int x, int y, int z) {
@@ -28,11 +30,57 @@ public class Day18 {
         int maxZ = records.stream().mapToInt(x -> x.z).max().getAsInt() + 1;
 
         boolean[][][] map = new boolean[maxX][maxY][maxZ];
+        boolean[][][] routeToEdge = new boolean[maxX][maxY][maxZ];
         for(Location r : records) {
             map[r.x][r.y][r.z] = true;
         }
 
+        for(int x = 0; x<maxX; x++) {
+            for(int y = 0; y<maxY; y++) {
+                for(int z = 0; z<maxZ; z++) {
+                    if(hasRouteToEdge(new Location(x, y, z), map, routeToEdge, new HashSet<>())) {
+                        routeToEdge[x][y][z] = true;
+                    }
+                }
+            }
+        }
+
+        // Fill in...
+        for(int x = 0; x<maxX; x++) {
+            for (int y = 0; y < maxY; y++) {
+                for (int z = 0; z < maxZ; z++) {
+                    if(!routeToEdge[x][y][z] && !map[x][y][z]) {
+                        map[x][y][z] = true;
+                    }
+                }
+            }
+        }
+
         System.out.println(records.stream().mapToInt(r -> count(map, r)).sum());
+    }
+
+
+    static boolean hasRouteToEdge(Location location, boolean[][][] worldMap, boolean[][][] routeExists, Set<Location> checked) {
+        if(checked.contains(location)) {
+            return false;
+        }
+        checked.add(location);
+        if(!location.inBounds(worldMap)) {
+            return true;
+        }
+
+        if(worldMap[location.x][location.y][location.z]) {
+            return false;
+        }
+        if(routeExists[location.x][location.y][location.z]) return true;
+        for(Location p : pointsToCheck) {
+            if(hasRouteToEdge(p.add(location), worldMap, routeExists, checked)) {
+                routeExists[location.x][location.y][location.z] = true;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     static Location[] pointsToCheck = new Location[]{
