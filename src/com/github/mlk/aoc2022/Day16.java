@@ -67,7 +67,7 @@ public class Day16 {
         Pattern pattern = Pattern.compile(regex);
 
         int index = 0;
-        for(String line : Day16Data.data.split("\n")) {
+        for(String line : Day16Data.exampleData.split("\n")) {
             Matcher matcher = pattern.matcher(line);
             matcher.find();
             String name = matcher.group(1);

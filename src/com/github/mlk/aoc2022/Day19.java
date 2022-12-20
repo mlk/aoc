@@ -1,9 +1,10 @@
 package com.github.mlk.aoc2022;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -60,7 +61,7 @@ public class Day19 {
         }
     }
 
-    public static void main(String... arv) {
+    public static void main(String... arv) throws InterruptedException {
         List<Blueprint> blueprints = new ArrayList<>();
         for(String v : Day19Data.data2.split("\n")) {
             blueprints.add(Blueprint.parse(v));
@@ -69,14 +70,17 @@ public class Day19 {
         //System.out.println(max(new Minute(1, 1, 0, 0, 0, 1, 0, 0, 0), blueprints.get(1), 24));
 
         List<Integer> scores = new ArrayList<>();
+        ExecutorService s = Executors.newFixedThreadPool(3);
         for(Blueprint blueprint : blueprints) {
-            System.out.println(blueprint.id + "/" + blueprints.size() + " - " + new Date());
-            long hey = System.currentTimeMillis();
-            int i = max(new Minute(1, 1, 0, 0, 0, 1, 0, 0, 0), blueprint, 32);
+            s.execute(() -> {
+                        ;
+                        System.out.println(blueprint.id + "/" + blueprints.size() + " - " + new Date());
+                        long hey = System.currentTimeMillis();
+                        int i = max(new Minute(1, 1, 0, 0, 0, 1, 0, 0, 0), blueprint, 32);
 
-            scores.add(i);
-            System.out.println(" > " + blueprint.id + " " + i + " " + (((System.currentTimeMillis() - hey)/1000)));
-
+                        scores.add(i);
+                        System.out.println(" > " + blueprint.id + " " + i + " " + (((System.currentTimeMillis() - hey) / 1000)));
+                    });
 
             /*
             List<Minute> currentMinute = List.of(new Minute(1, 1, 0, 0, 0, 1, 0, 0, 0));
@@ -110,6 +114,7 @@ public class Day19 {
              */
 
         }
+        s.awaitTermination(60, TimeUnit.MINUTES);
         System.out.println(scores.stream().mapToInt(x -> x).reduce((a, m) -> a*m));
     }
 
@@ -119,7 +124,11 @@ public class Day19 {
             //return minute.options(bp).stream().max((x, y) -> x.geode - y.geode).get().geode;
         }
         int max = 0;
+        if(minute.minute > 23 && minute.geodeBots < 1) {
+            return -1;
+        }
         for(Minute next : minute.options(bp)) {
+
             int c = max(next, bp, targetMinute);
             if(max <= c) max = c;
         }
