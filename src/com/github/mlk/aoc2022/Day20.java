@@ -53,7 +53,7 @@ public class Day20 {
             return next.find(data, start);
         }
 
-        ListItem moveForward(ListItem first) {
+        void moveForward() {
             ListItem myNext = next.next;
             ListItem myPrevious = next;
 
@@ -64,18 +64,10 @@ public class Day20 {
             next.next = this;
             next = myNext;
             previous = myPrevious;
-
-            if(this == first) {
-                return previous;
-            }
-            if(next == first) {
-                return this;
-            }
-            return first;
         }
 
 
-        ListItem moveBackward(ListItem first) {
+        void moveBackward() {
 
             ListItem startingPrevious = previous;
             ListItem startingNext = next;
@@ -89,12 +81,6 @@ public class Day20 {
             startingPrevious.previous = this;
             this.previous = previousPrevious;
             this.next = startingPrevious;
-
-
-            if(this == first) {
-                return previous;
-            }
-            return first;
         }
 
 
@@ -113,11 +99,11 @@ public class Day20 {
         List<DataPoint> originalList = new ArrayList<>();
         ListItem first = new ListItem();
         ListItem previous = first;
-        first.data = new DataPoint(Integer.parseInt(data[0]), 0);
+        first.data = new DataPoint(Long.parseLong(data[0]) * 811589153, 0);
         originalList.add(first.data);
 
         for(int i = 1; i< data.length; i++) {
-            DataPoint value = new DataPoint(Long.parseLong(data[i]), i);
+            DataPoint value = new DataPoint(Long.parseLong(data[i]) * 811589153, i);
             originalList.add(value);
             ListItem current = new ListItem();
             current.data = value;
@@ -128,26 +114,31 @@ public class Day20 {
         previous.next = first;
         first.previous = previous;
 
-        for(DataPoint d : originalList) {
-            System.out.println("Moving: " + d.value);
-            ListItem item = first.find(d);
+        for(int t = 0; t<10;t ++ ) {
 
-            if(d.value >0) {
-                for(int i = 0; i<d.value;i++) {
-                    first = item.moveForward(first);
-                }
-            } else if(d.value<0) {
-                for(int i = 0; i<Math.abs(d.value);i++) {
-                    first = item.moveBackward(first);
+
+            for (DataPoint d : originalList) {
+                long dValue = d.value % (originalList.size()-1);
+                System.out.println("Moving: " + d.value + " " + dValue);
+
+                ListItem item = first.find(d);
+
+                if (d.value > 0) {
+                    for (int i = 0; i < dValue; i++) {
+                        item.moveForward();
+                    }
+                } else if (d.value < 0) {
+                    for (int i = 0; i < Math.abs(dValue); i++) {
+                        item.moveBackward();
+                    }
                 }
             }
             //first.display();
         }
-
         ListItem n = first.findValue(0);
 
 
-        int total = 0;
+        long total = 0;
         for(int i = 0; i<3; i++) {
             for(int x = 0; x<1000;x++) {
                 if(n.next == null) {
@@ -155,7 +146,7 @@ public class Day20 {
                 }
                 n = n.next;
             }
-            total += n.data.value;
+            total += (n.data.value);
             System.out.println(n.data.value);
         }
         System.out.println(" >> " + total);
