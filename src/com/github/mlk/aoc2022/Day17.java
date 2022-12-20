@@ -12,16 +12,16 @@ public class Day17 {
             {false, true, false},
             {true, true, true},
             {false, true, false}
-        };
+    };
     static boolean[][] mirrorL = new boolean[][]{
             {true, true, true},
             {false, false, true},
             {false, false, true},
     };
-    static boolean[][] lineDown = new boolean[][] {{true},{true},{true},{true}};
+    static boolean[][] lineDown = new boolean[][]{{true}, {true}, {true}, {true}};
     static boolean[][] square = new boolean[][]{
-            { true, true},
-            { true, true},
+            {true, true},
+            {true, true},
     };
 
     static List<boolean[][]> shapes = List.of(line, plus, mirrorL, lineDown, square);
@@ -43,21 +43,21 @@ public class Day17 {
         }
 
         public void addShape(boolean[][] shape, int x, int y) {
-            for(int cy = 0; cy< shape.length; cy++) {
+            for (int cy = 0; cy < shape.length; cy++) {
                 boolean[] line = getLineAndAdd((y + cy));
-                for(int cx = 0; cx< shape[0].length; cx++) {
-                    if(shape[cy][cx]) {
-                         line[x + cx] = true;
+                for (int cx = 0; cx < shape[0].length; cx++) {
+                    if (shape[cy][cx]) {
+                        line[x + cx] = true;
                     }
                 }
             }
         }
 
         public void removeShape(boolean[][] shape, int x, int y) {
-            for(int cy = 0; cy< shape.length; cy++) {
+            for (int cy = 0; cy < shape.length; cy++) {
                 boolean[] line = getLineAndAdd(y + cy);
-                for(int cx = 0; cx< shape[0].length; cx++) {
-                    if(shape[cy][cx]) {
+                for (int cx = 0; cx < shape[0].length; cx++) {
+                    if (shape[cy][cx]) {
                         line[x + cx] = false;
                     }
                 }
@@ -65,11 +65,11 @@ public class Day17 {
         }
 
         public void printLines(int lines) {
-            for(int y = lines; y>=-1; y--) {
+            for (int y = lines; y >= -1; y--) {
                 boolean[] line = getLine(y);
 
-                for(int x = 0; x<7; x++) {
-                    if(line[x]) {
+                for (int x = 0; x < 7; x++) {
+                    if (line[x]) {
                         System.out.print("#");
                     } else {
                         System.out.print(" ");
@@ -83,31 +83,31 @@ public class Day17 {
         public boolean[] getLineAndAdd(int y) {
             long offsetY = y - offSet;
 
-            for(int i = data.size(); i<=offsetY; i++) {
+            for (int i = data.size(); i <= offsetY; i++) {
                 data.add(new boolean[7]);
             }
 
-            while(offsetY > data.size()) {
+            while (offsetY > data.size()) {
                 data.add(new boolean[7]);
             }
 
-            return data.get((int)offsetY);
+            return data.get((int) offsetY);
         }
 
         public boolean[] getLine(int y) {
             long offsetY = y - offSet;
 
-            if(y < offSet) {
+            if (y < offSet) {
                 boolean[] floor = new boolean[7];
                 Arrays.fill(floor, true);
                 return floor;
             }
 
-            if(data.size() <= offsetY) {
+            if (data.size() <= offsetY) {
                 return new boolean[7];
             }
 
-            return data.get((int)offsetY);
+            return data.get((int) offsetY);
 
         }
 
@@ -126,8 +126,7 @@ public class Day17 {
         }
 
         void offset() {
-            if(data.size() > 2000) {
-                //System.out.println("ofset " + data.size());
+            if (data.size() > 2000) {
                 offSet += 1000;
                 for (int i = 0; i < 1000; i++) {
                     data.remove(0);
@@ -145,8 +144,8 @@ public class Day17 {
         int width;
 
         Piece(boolean[][] shape,
-        int x,
-        int y) {
+              int x,
+              int y) {
             this.shape = shape;
             this.x = x;
             this.y = y;
@@ -154,22 +153,23 @@ public class Day17 {
         }
 
         void left(WorldMap map) {
-            if(x > 0) {
+            if (x > 0) {
                 int newX = x - 1;
-                if(map.collides(shape, newX, y, shape.length, width)) {
+                if (map.collides(shape, newX, y, shape.length, width)) {
                     return;
                 }
                 x = newX;
             }
 
         }
+
         void right(WorldMap map) {
             //System.out.println("x" + x + " width" + width + " " + (x+width) );
-            if((x + width) < 7) {
+            if ((x + width) < 7) {
                 int newX = x + 1;
                 //System.out.println(x + " - " + newX + " " + width);
 
-                if(map.collides(shape, newX, y, shape.length, width)) {
+                if (map.collides(shape, newX, y, shape.length, width)) {
                     return;
                 }
                 x = newX;
@@ -177,7 +177,7 @@ public class Day17 {
         }
 
         boolean drop(WorldMap worldMap) {
-            if(worldMap.collides(shape, x, y-1, shape.length, width)){
+            if (worldMap.collides(shape, x, y - 1, shape.length, width)) {
                 return true;
             }
             y--;
@@ -193,7 +193,7 @@ public class Day17 {
         char[] input = Day17Data.data.toCharArray();
 
         System.out.println(input.length + " / " + shapes.size());
-        System.out.println(1000000000000L / 200000 );
+        System.out.println(1000000000000L / 200000);
 
         int actionIndex = 0;
         int shapeIndex = 1;
@@ -201,22 +201,22 @@ public class Day17 {
 
         long start = System.currentTimeMillis();
 
-        while(true) {
-            if(input[actionIndex] == '>') piece.right(map);
-            if(input[actionIndex] == '<') piece.left(map);
-            if(piece.drop(map)) {
+        while (true) {
+            if (input[actionIndex] == '>') piece.right(map);
+            if (input[actionIndex] == '<') piece.left(map);
+            if (piece.drop(map)) {
                 map.addShape(piece);
 
                 int topY = -1;
-                for(int y = piece.y; y< map.size() + 2; y++) {
+                for (int y = piece.y; y < map.size() + 2; y++) {
                     //System.out.print(y + " ");
                     boolean[] dd = map.getLine(y);
                     boolean empty = true;
-                    for(boolean n : dd) {
-                        if(n) empty = false;
+                    for (boolean n : dd) {
+                        if (n) empty = false;
                     }
                     //System.out.println(empty);
-                    if(empty) {
+                    if (empty) {
                         topY = y;
                         break;
                     }
@@ -225,24 +225,24 @@ public class Day17 {
                 piece = new Piece(shapes.get(shapeIndex), 2, topY + 3);
                 shapeIndex++;
                 actions++;
-                if(shapeIndex >= shapes.size()) shapeIndex=0;
-                if(map.data.size() > 2000) {
+                if (shapeIndex >= shapes.size()) shapeIndex = 0;
+                if (map.data.size() > 2000) {
                     map.offset();
                 }
-                if(shapeIndex == 0 && actionIndex == 0) {
+                if (shapeIndex == 0 && actionIndex == 0) {
                     System.out.println(actions);
                 }
 
-                if(actions % 5000000 == 0) {
+                if (actions % 5000000 == 0) {
                     long time = System.currentTimeMillis() - start;
-                    System.out.println(actions + " " + map.size() + " " + map.data.size() + " " + ((time/1000)/60));
+                    System.out.println(actions + " " + map.size() + " " + map.data.size() + " " + ((time / 1000) / 60));
 
                 }
-                if(actions > 1000000000000L)
-                 break;
+                if (actions > 1000000000000L)
+                    break;
             }
             actionIndex++;
-            if(actionIndex>=input.length) actionIndex = 0;
+            if (actionIndex >= input.length) actionIndex = 0;
         }
 
 
@@ -264,17 +264,16 @@ public class Day17 {
     }
 
     static int getTop(Piece piece, WorldMap map) {
-        System.out.println("getTop " + piece.x + "x" +  piece.y + "   " + map.data.size() + 2);
+        System.out.println("getTop " + piece.x + "x" + piece.y + "   " + map.data.size() + 2);
         int topY = -1;
-        for(int y = piece.y-3; y>= map.size() + 2; y++) {
+        for (int y = piece.y - 3; y >= map.size() + 2; y++) {
             System.out.print(" >> " + y);
             boolean[] dd = map.getLine(y);
             boolean empty = true;
-            for(boolean n : dd) {
-                if(n) empty = false;
+            for (boolean n : dd) {
+                if (n) empty = false;
             }
-            System.out.println(empty);
-            if(empty) {
+            if (empty) {
                 topY = y;
                 break;
             }

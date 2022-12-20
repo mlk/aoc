@@ -8,8 +8,6 @@ import java.util.Set;
 public class Day18 {
     record Location(int x, int y, int z) {
         boolean inBounds(boolean[][][] map) {
-            //System.out.println(this);
-            //System.out.println(map.length + ", " + map[0].length + ", " + map[0][0].length);
             return (x >= 0 && x < map.length)
                     && (y >= 0 && y < map[0].length)
                     && (z >= 0 && z < map[0][0].length);
