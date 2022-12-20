@@ -115,12 +115,8 @@ public class Day20 {
         first.previous = previous;
 
         for(int t = 0; t<10;t ++ ) {
-
-
             for (DataPoint d : originalList) {
                 long dValue = d.value % (originalList.size()-1);
-                System.out.println("Moving: " + d.value + " " + dValue);
-
                 ListItem item = first.find(d);
 
                 if (d.value > 0) {
