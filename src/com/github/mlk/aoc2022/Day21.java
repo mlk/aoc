@@ -125,7 +125,7 @@ public class Day21 {
             monkeys.put(parts[0], new Monkey(parts[0], parts[1]));
         }
 
-        System.out.println(monkeys.get("root").computeValue());
+        System.out.println("Part 1: " + monkeys.get("root").computeValue());
 
         Monkey root = monkeys.get("root");
         Monkey withMe;
@@ -138,27 +138,21 @@ public class Day21 {
             target = root.lhMonkey().get();
         }
         long targetActual = target.computeValue();
-        System.out.println();
-        System.out.println(withMe.computeValue());
-        System.out.println(withMe);
-
 
         cache(withMe);
-
-        //withMe.display(0);
 
         long start = 0;
         long end = Long.MAX_VALUE;
 
         while(true) {
 
-            long chunkSize = (end - start) / 100L;
+            long chunkSize = (end - start) / 1000L;
             if(chunkSize < 100) {
                 chunkSize = 1;
             }
             long value = tryBetween(start, end, chunkSize, targetActual, withMe);
             if(chunkSize == 1) {
-                System.out.println(value);
+                System.out.println("Part 2: " + value);
                 return;
             }
             start = value - chunkSize;
@@ -168,7 +162,7 @@ public class Day21 {
     }
 
     static long tryBetween(long start, long end, long chunkSize, long targetActual, Monkey withMe) {
-        System.out.println(start + " to " + end + " chunk: " + chunkSize);
+        System.out.println("  >>  " + start + " to " + end + " chunk: " + chunkSize);
 
         for(long i = start; i <= end; i+=chunkSize) {
             monkeys.put("humn", new Monkey("humn", "" + i));
