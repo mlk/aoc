@@ -99,24 +99,6 @@ public class Day21 {
         throw new RuntimeException();
     }
 
-    static Long target(String math) {
-        String[] parsed = math.split(" ");
-        Monkey lhMonkey = monkeys.get(parsed[0]);
-        Monkey rhMonkey = monkeys.get(parsed[2]);
-
-        if (parsed[1].equals("+")) {
-            return lhMonkey.computeValue() - rhMonkey.computeValue();
-        } else if (parsed[1].equals("-")) {
-            return lhMonkey.computeValue() + rhMonkey.computeValue();
-        } else if (parsed[1].equals("*")) {
-            return lhMonkey.computeValue() / rhMonkey.computeValue();
-        } else if (parsed[1].equals("/")) {
-            return lhMonkey.computeValue() * rhMonkey.computeValue();
-        }
-        throw new RuntimeException();
-    }
-
-
     public static void main(String[] arg) {
 
         for (String line : Day21Data.data.split("\n")) {
