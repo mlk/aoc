@@ -30,6 +30,7 @@ public class Day22 {
         Direction(Point offset, char draw, int pass) {
             this.offset = offset;
             this.draw = draw;
+            this.pass = pass;
         }
 
         int pass;
@@ -104,7 +105,7 @@ public class Day22 {
         while(map[me.y][me.x] != Space.AIR) {
             me = me.add(right.offset);
         }
-        me.add(left.offset);
+        //me.add(left.offset);
         System.out.println(me);
         Direction meD = right;
 
