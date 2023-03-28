@@ -2,8 +2,10 @@
 
 For the giggles I'm seeing how far I can get using a [Psion Series 5](https://en.wikipedia.org/wiki/Psion_Series_5). All code in this folder is written and run on a real device using the built-in [Psion OPL](https://en.wikipedia.org/wiki/Open_Programming_Language).
 
-##Device Specification:
+##Device Specification
 
+|.|.|
+|-|-|
 |**Release Year**|1997| 
 |**CPU**| 18MHz ARM7100 RISC CPU|
 |**Memory**|8MB|
