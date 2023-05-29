@@ -1,0 +1,1 @@
+This took a fair bit longer than expected to get going on. The version of C for the 8088 based HP is pretty darn old (from 1989) and I don't have easy access to the documentation. For example I've only just noticed that it does support atoi, I just don't need to import stdlib to use it. Doh. 
