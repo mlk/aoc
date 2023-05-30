@@ -26,9 +26,10 @@ As such downloading the input, submitting results and committing to Git are all 
 
 Doing so was an interesting challange, I don't have a serial cable and I had to make one. 
 
-## What am I using
+### What am I using
 
 * [How to build a $6 HP 95LX/48 serial cable](https://www.youtube.com/watch?v=JNTjJ_oEeh8)
 * Personal C Compiler downloaded from [RetroIsle](http://www.retroisle.com/others/hp95lx/software.php)
 * [Kermit](http://kermit.wwarthen.com) to move files from my Windows PC to the HP 95lx.
 * Freemacs  downloaded from [RetroIsle](http://www.retroisle.com/others/hp95lx/software.php)
+
