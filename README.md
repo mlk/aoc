@@ -6,19 +6,22 @@ The order below is the order I started them in.
 
 2022
 ----
-**Language**: Java
-**Hardware**: MacBook Pro (2018)
-**Notes:**
+
+**Language**: Java<br>
+**Hardware**: MacBook Pro (2018)<br>
+**Notes:**<br>
 I hack my existing solution for Part 2 so look at the git history to find Part 1.
 
 2015
 ----
-**Language**: OPL
-**Hardware**: Psion Series 5
+
+**Language**: OPL<br>
+**Hardware**: Psion Series 5<br>
 **Notes:**  [See Psion README](https://github.com/mlk/aoc/tree/main/PSION)
 
 2016
 ----
-**Language**: C
-**Hardware**: HP 95lx
+
+**Language**: C<br>
+**Hardware**: HP 95lx<br>
 **Notes:**  [See Psion README]([https://github.com/mlk/aoc/tree/main/PSION](https://github.com/mlk/aoc/tree/main/hp95lx))
