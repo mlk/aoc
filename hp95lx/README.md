@@ -17,7 +17,7 @@ For the giggles I'm seeing how far I can get using a [HP 95LX](https://en.m.wiki
 
 I watched a video on an [HP 200lx](https://en.wikipedia.org/wiki/HP_200LX) and was reminded of my old [Psion Revo](https://en.wikipedia.org/wiki/Psion_Revo). Alas my Revo is dead and replacements cost more than I was willing to spend. The Series 5 (the bigger, little brother) was an acceptable cost so I picked on up. Now I needed to justify the cost by doing *something* with it.
 
-The PSION folder was that something and it was great fun, so I picked up a HP 95LX to try something different.
+The [PSION folder](https://github.com/mlk/aoc/tree/main/PSION) was that something and it was great fun, so I picked up a HP 95LX to try something different.
 
 ## Am I 100% On Device?
 
