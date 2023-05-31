@@ -26,7 +26,7 @@ main() {
    char visited[1000][1000];
    FILE *fptr;
    char my[900];
-   fptr = fopen("c:\input.txt", "r");
+   fptr = fopen("c:\\input.txt", "r");
    fgets(my, 900, fptr);
    fclose(fptr);
 
