@@ -24,4 +24,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 
 **Language**: C<br>
 **Hardware**: HP 95lx<br>
-**Notes:**  [See Psion README](https://github.com/mlk/aoc/tree/main/PSION)
+**Notes:**  [See HP 95LX README]([https://github.com/mlk/aoc/tree/main/HP95lx](https://github.com/mlk/aoc/tree/main/hp95lx))
