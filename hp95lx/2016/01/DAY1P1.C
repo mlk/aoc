@@ -25,7 +25,7 @@ main() {
    int y = 0;
    FILE *fptr;
    char my[900];
-   fptr = fopen("c:\input.txt", "r");
+   fptr = fopen("c:\\input.txt", "r");
    fgets(my, 900, fptr);
    fclose(fptr);
 
