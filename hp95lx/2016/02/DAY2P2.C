@@ -55,7 +55,7 @@ main() {
    location.y = 1;
 
    FILE *fptr;
-   fptr = fopen("c:\input.txt", "r");
+   fptr = fopen("c:\\input.txt", "r");
    char input[1000];
    while(fgets(input, 1000, fptr)) {
        int i = 0;
