@@ -11,7 +11,7 @@ For the giggles I'm seeing how far I can get using a [Psion Series 5](https://en
 |**Memory**|8MB (Shared with RAM Drive)|
 |**Screen**|640x240|
 |**OS**|EPOC32|
-|**Exteral Storage**|512MB [CompactFlash](https://en.wikipedia.org/wiki/CompactFlash)|
+|**Exteral Storage**|128MB [CompactFlash](https://en.wikipedia.org/wiki/CompactFlash)|
 
 ## File Format
 
