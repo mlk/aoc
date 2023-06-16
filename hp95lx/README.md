@@ -8,7 +8,7 @@ For the giggles I'm seeing how far I can get using a [HP 95LX](https://en.m.wiki
 |-|-|
 |**Release Year**|1991| 
 |**CPU**|NEC V20 5.37MHz|
-|**Memory**|512KB|
+|**Memory**|512KB (Shared with RAM Drive)|
 |**Screen**|240 x 128 quarter [CGA](https://en.m.wikipedia.org/wiki/Color_Graphics_Adapter)|
 |**OS**|MS-DOS 3.22|
 |**Exteral Storage**|512KB [SRAM](https://en.m.wikipedia.org/wiki/Static_random-access_memory)|
