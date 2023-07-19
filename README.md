@@ -25,3 +25,10 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 **Language**: C<br>
 **Hardware**: HP 95lx<br>
 **Notes:**  [See HP 95LX README](https://github.com/mlk/aoc/tree/main/hp95lx)
+
+2017
+----
+
+**Language**: VB6<br>
+**Hardware**: Hand386<br>
+**Notes:**  [See Hand386 README](https://github.com/mlk/aoc/tree/main/Hand386)
