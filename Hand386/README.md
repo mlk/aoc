@@ -7,11 +7,11 @@ For the giggles I'm seeing how far I can get using a [Hand386](https://www.aliex
 |.|.|
 |-|-|
 |**Release Year**|2023 (but the CPU dates from 1988)| 
-|**CPU**|M6117D (386SX) @ |
+|**CPU**|M6117D (386SX) |
 |**Memory**|8MB|
 |**Screen**|640x480 256 colours|
 |**OS**|Windows 95|
-|**Exteral Storage**|Max 2GB USB)|
+|**Exteral Storage**|Max 2GB USB|
 
 ## WHY?!
 
