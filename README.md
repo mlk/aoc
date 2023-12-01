@@ -32,3 +32,11 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 **Language**: VB6<br>
 **Hardware**: Hand386<br>
 **Notes:**  [See Hand386 README](https://github.com/mlk/aoc/tree/main/Hand386)
+
+2023
+----
+**Language**: Mixed<br>
+**Hardware**: Mixed<br>
+**Notes:**  While I do not intend on using a different computer each day, I will be mixing it up this year.
+
+* Day One: VB6 on the Hand386
