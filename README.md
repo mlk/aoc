@@ -41,3 +41,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 
 * Day 1: VB6 on the Hand386
 * Day 2: VB6 on the Hand386
+* Day 3: Java on the GPD WIN mini (in desktop mode)
