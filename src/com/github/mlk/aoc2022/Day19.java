@@ -63,7 +63,7 @@ public class Day19 {
 
     public static void main(String... arv) throws InterruptedException {
         List<Blueprint> blueprints = new ArrayList<>();
-        for(String v : Day19Data.data2.split("\n")) {
+        for(String v : Day1Data.data.split("\n")) {
             blueprints.add(Blueprint.parse(v));
         }
 

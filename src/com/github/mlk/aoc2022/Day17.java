@@ -188,7 +188,7 @@ public class Day17 {
         WorldMap map = new WorldMap();
 
         Piece piece = new Piece(line, 2, 3);
-        char[] input = Day17Data.data.toCharArray();
+        char[] input = Day1Data.data.toCharArray();
 
         System.out.println(input.length + " / " + shapes.size());
         System.out.println(1000000000000L / 200000 );

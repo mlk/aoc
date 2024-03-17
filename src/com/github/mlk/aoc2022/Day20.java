@@ -95,7 +95,7 @@ public class Day20 {
     }
 
     public static void main(String... arg) {
-        String[] data = Day20Data.data.split("\n");
+        String[] data = Day1Data.data.split("\n");
         List<DataPoint> originalList = new ArrayList<>();
         ListItem first = new ListItem();
         ListItem previous = first;

@@ -19,7 +19,7 @@ public class Day18 {
     }
 
     public static void main(String... arg) {
-        List<Location> records  = Arrays.stream(Day18Data.data.split("\n"))
+        List<Location> records  = Arrays.stream(Day1Data.data.split("\n"))
                 .map(x -> x.split(","))
                 .map(l -> new Location(Integer.parseInt(l[0]), Integer.parseInt(l[1]), Integer.parseInt(l[2]))).toList();
 

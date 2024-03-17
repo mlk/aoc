@@ -75,7 +75,7 @@ public class Day15 {
         List<Sensor> sensors = new ArrayList<>();
         List<Point> beacons = new ArrayList<>();
 
-        for(String line : Day15Data.data.split("\n")) {
+        for(String line : Day1Data.data.split("\n")) {
 
             Matcher m = pattern.matcher(line);
             m.find();

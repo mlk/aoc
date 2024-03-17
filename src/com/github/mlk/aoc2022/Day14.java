@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.github.mlk.aoc2022.Day14Data.input;
+import static com.github.mlk.aoc2022.Day1Data.input;
 
 public class Day14 {
 

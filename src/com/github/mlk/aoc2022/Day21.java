@@ -101,7 +101,7 @@ public class Day21 {
 
     public static void main(String[] arg) {
 
-        for (String line : Day21Data.data.split("\n")) {
+        for (String line : Day1Data.data.split("\n")) {
             String[] parts = line.split(": ");
 
             monkeys.put(parts[0], new Monkey(parts[0], parts[1]));

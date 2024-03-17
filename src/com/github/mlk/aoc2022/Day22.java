@@ -72,8 +72,8 @@ public class Day22 {
     public static void main(String[] arg) {
 
 
-        String[] input = Day22Data.map.split("\n");
-        String[] path = Day22Data.movement.replace("R", "\nR\n").replace("L", "\nL\n").split("\n");
+        String[] input = Day1Data.map.split("\n");
+        String[] path = Day1Data.movement.replace("R", "\nR\n").replace("L", "\nL\n").split("\n");
 
         Space[][] map = new Space[input.length + 2][Arrays.stream(input).mapToInt(String::length).max().getAsInt() + 2];
         Arrays.fill(map[0], Space.WARP);
