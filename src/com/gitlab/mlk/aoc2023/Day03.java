@@ -12,7 +12,6 @@ List<String> parts = new ArrayList<>();
 void main(String... arg){
     String[] lines = example.split("\n");
 
-
     for(int x = 0; x < lines.length; x++) {
         for(int y = 0; y<lines[x].length(); y++) {
             char cur = at(lines, x, y);

@@ -35,6 +35,7 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 
 2023
 ----
+
 **Language**: Mixed<br>
 **Hardware**: Mixed<br>
 **Notes:**  While I do not intend on using a different computer each day, I will be mixing it up this year.
@@ -43,3 +44,10 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 2: VB6 on the Hand386
 * Day 3: Java on the GPD WIN mini (in desktop mode)
 * Day 4: Java on the GPD WIN 1.
+
+2018
+----
+
+**Language**: MicroPython<br>
+**Hardware**: CardPuter (ESP32)<br>
+**Notes:**  [See CardPuter README](https://github.com/mlk/aoc/tree/main/CardPuter) 
