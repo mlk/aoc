@@ -43,3 +43,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 2: VB6 on the Hand386
 * Day 3: Java on the GPD WIN mini (in desktop mode)
 * Day 4: Java on the GPD WIN 1.
+* Day 5: Kotlin on the [ClockworkPI DevTerm](https://www.clockworkpi.com/home-devterm).
