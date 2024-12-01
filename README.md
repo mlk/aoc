@@ -35,6 +35,7 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 
 2023
 ----
+
 **Language**: Mixed<br>
 **Hardware**: Mixed<br>
 **Notes:**  While I do not intend on using a different computer each day, I will be mixing it up this year.
@@ -52,3 +53,12 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 **Language**: MicroPython<br>
 **Hardware**: CardPuter (ESP32)<br>
 **Notes:**  [See CardPuter README](https://github.com/mlk/aoc/tree/main/CardPuter) 
+
+2024
+---
+
+**Language**: Mixed<br>
+**Hardware**: Mixed<br>
+**Notes:**  While I do not intend on using a different computer each day, I will be mixing it up this year.
+
+* Day 1: Python on the CardPuter
