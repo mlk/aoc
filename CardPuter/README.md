@@ -26,4 +26,4 @@ As such downloading the input, submitting results and committing to Git are all 
 
 ### What am I using
 
-* The onboard editor with [MicroHydra](https://github.com/echo-lalia/Cardputer-MicroHydra). 
+* The onboard editor with [MicroHydra](https://github.com/echo-lalia/Cardputer-MicroHydra). MicroHydra has made API changes. I do not plan on going back and fixing old solutions. 
