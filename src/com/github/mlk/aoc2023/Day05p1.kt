@@ -1,4 +1,4 @@
-package com.gitlab.mlk.aoc2023
+package com.github.mlk.aoc2023
 import java.io.File
 
 fun main() {

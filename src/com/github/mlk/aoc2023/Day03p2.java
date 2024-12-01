@@ -1,4 +1,4 @@
-import com.gitlab.mlk.aoc2023.Point;
+import com.github.mlk.aoc2023.Point;
 
 import java.util.*;
 
