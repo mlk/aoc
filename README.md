@@ -63,3 +63,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 **Notes:**  While I do not intend on using a different computer each day, I will be mixing it up this year.
 
 * Day 1: Python on the CardPuter
+* Day : Python on the CardPuter
