@@ -1,6 +1,5 @@
 package com.github.mlk.aoc2023
 
-import com.github.mlk.devterm.ThermalPrinter
 import java.io.File
 
 fun main() {

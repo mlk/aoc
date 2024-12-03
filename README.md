@@ -47,6 +47,8 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 5: Kotlin on the [ClockworkPI DevTerm](https://www.clockworkpi.com/home-devterm).
 * Day 6: Kotlin on the ClockworkPI DevTerm.
 * Day 7: Kotlin on the ClockworkPI DevTerm.
+* Day 8p1: Kotlin on the ClockworkPI DevTerm.
+* Day 9: Kotlin on the ClockworkPI DevTerm.
 
 2018
 ----
