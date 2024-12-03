@@ -21,10 +21,9 @@ fun main() {
         for(location in oldLocations) {
             val pair = map[location] !!
             val dir = path[(counter % path.length.toUInt()).toInt()]
-            locations.add(if (dir == 'L') pair.first else pair.second)
+            locations.add(if (dir == 'L') pair.first else if (dir == 'R') pair.second else "fuck")
         }
         counter ++
-        println(locations)
     }
 
     println(counter)
