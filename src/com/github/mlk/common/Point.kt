@@ -6,6 +6,6 @@ data class P(val x: Int, val y: Int) {
 
 val directions = listOf(
     P(1, 1),  P(0, 1),  P(-1, 1),
-    P(1, 0)         ,   P(-1, 0),
+    P(1, 0),                  P(-1, 0),
     P(1, -1), P(0, -1), P(-1, -1),
 )
