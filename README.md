@@ -67,3 +67,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 1: Python on the CardPuter
 * Day 2: Python on the CardPuter
 * Day 3: Kotlin on the ClockworkPi DevTerm
+* Day 4: Kotlin on the ClockworkPi DevTerm
