@@ -27,3 +27,7 @@ fun List<String>.forEachPoint(action: (P, Char) -> Unit) {
         line.forEachIndexed { y, item -> action(P(x, y), item) }
     }
 }
+
+fun <T> List<String>.mapPoints(action: (P, Char) -> T) =
+    this.mapIndexed { y, line -> line.mapIndexed { x, item -> action(P(x, y), item) } }
+        .flatten()

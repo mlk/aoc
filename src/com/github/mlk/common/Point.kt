@@ -11,3 +11,5 @@ val directions = listOf(
     P(1, 0),            P(-1, 0),
     P(1, -1), P(0, -1), P(-1, -1),
 )
+
+val cardinalDirections = listOf(P(0, -1), P(1, 0), P(0, 1), P(-1, 0))
