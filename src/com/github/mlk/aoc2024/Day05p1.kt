@@ -10,16 +10,6 @@ fun main() {
     }
     println(data.filter { it.contains(",") }
         .map { line -> line.split(",").map { it.toInt() } }
-        .filter { pages ->
-            pages.forEachIndexed { i, v ->
-                for (otherIndex in 0..i) {
-                    if (ordering.contains(Pair(v, pages[otherIndex]))) {
-                        return@filter false
-                    }
-                }
-            }
-            true
-        }.sumOf {
-            it[it.size / 2]
-        })
+        .filter { pages -> pages.isOrdered(ordering) }
+        .sumOf { it[it.size / 2] })
 }
