@@ -15,7 +15,7 @@ For the giggles I'm seeing how far I can get using a [Psion Series 5](https://en
 
 ## File Format
 
-The files are stored in the Psion's binary format, which is not very Git friendly. Yeah it is a pain in the bum, but I can't be bothered to convert them to text for git.
+The files are stored in the Psion's binary format, which is not very Git friendly. I've also pushed text versions of the files.
 
 ## WHY?!
 
