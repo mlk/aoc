@@ -11,8 +11,8 @@ fun main() {
 
     var count = 0
 
-    for(ny in 0 until data.size) {
-        for (nx in 0 until data[ny].length) {
+    for(ny in data.indices) {
+        for (nx in data[ny].indices) {
             var currentLocation = data.find('^')
             var currentDirection = 0
             val previousLocation = mutableSetOf<Pair<P, Int>>()
