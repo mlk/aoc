@@ -1,0 +1,21 @@
+PROC 	hello:
+	local error%,phandle%,txt$(1),level%
+	
+  error% = IOopen(phandle%, "d:\2015\01\input.txt.txt" , $0000)
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 1)
+		if error% < 0
+			print error%
+			break
+		endif
+		pokeb addr(txt$), error%
+		if txt$ = "("
+			level% = level% + 1
+		elseif txt$ = ")"
+			level% = level% - 1
+		endif
+	endwh
+	print level%
+	error% = ioclose(phandle%)
+	get
+ENDP

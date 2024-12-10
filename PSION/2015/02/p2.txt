@@ -1,0 +1,66 @@
+PROC part2:
+	local error%,phandle%,txt$(10),level%, len%, d%, d1%, total	, s1%(3), big1%, big2%, idx%
+  error% = IOopen(phandle%, "d:\2015\02\input.txt", $0020)	  
+  if error% < 0 
+  	print "bugger"
+  	raise error%
+  endif
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 10)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+
+		len% = len(txt$)
+
+  	d% = strindexof%:(txt$, "x", 1, len%)
+  	d1% = strindexof%:(txt$, "x", d% + 1, len%)
+  
+	  s1%(1) = val(mid$(txt$, 1, d% 	- 1))
+  	s1%(2) = val(mid$(txt$, d% + 1, d1% - d% - 1))
+  	s1%(3) = val(right$(txt$, len% - d1%))
+		big1% = 5000
+		big2% = 5000
+		idx% = 1
+		do
+			if s1%(idx%) < big1%
+				big2% = big1%
+				big1% = s1%(idx%)
+			elseif s1%(idx%) < big2%
+				big2% = s1%(idx%)
+			endif 
+			idx% = idx% + 1
+		until idx% = 4
+		total = total + (big1% * 2) + (big2% * 2) + (s1%(1) * s1%(2) * s1%(3))
+
+	endwh
+
+	print total
+
+  
+ 	error% = ioclose(phandle%)		
+  	
+ 	get
+ENDP
+
+PROC strindexof%:(txt$, ch$, start%, slen%)
+	local mcur$(1), l%, didx%
+	l% = 1
+
+	didx% = start%
+	do
+		mcur$ = mid$(txt$, didx%, l%)
+		
+		if mcur$ = ch$
+			return didx%
+		endif
+		didx% = didx% + 1
+	until didx% = slen% + 1
+	
+	return -1
+ENDP
