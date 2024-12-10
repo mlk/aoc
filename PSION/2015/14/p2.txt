@@ -1,0 +1,82 @@
+PROC part2:
+	global txt$(255), error%, phandle%, idx%, distance%(10), kps%(10), runTime%(10), restTime%(10), total%(10), step%, length%, func%, score%(10)
+	idx% = 1
+
+  error% = IOopen(phandle%, "d:\2015\14\input.txt", $0020)
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :		
+		error% = ioread(phandle%, addr(txt$) + 1, 255)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		parse:(txt$, idx%)
+		idx% = idx% + 1
+	endwh
+	iocLose(pHandle%)
+	length% = idx%
+	print "Simulation..."
+	while step% < 2503
+		idx% = 1
+		while idx% < length%
+			func% = int(total%(idx%) * ((intf(step%) / total%(idx%)) - (step% / total%(idx%))) + 0.5)
+			if func% < runTime%(idx%)
+				distance%(idx%) = distance%(idx%) + kps%(idx%)
+			endif
+			idx% = idx% + 1
+		endwh
+		score:
+		step% = step% + 1
+	endwh	
+	print "Scores"
+	idx% = 1
+	while idx% < length%
+		print score%(idx%)
+		idx% = idx% + 1
+	endwh
+
+	get
+ENDP
+
+proc score:
+	local cidx%, curMax%
+	curMax% = -1
+	cidx% = 1
+	while cidx% < length%
+		if curMax% < distance%(cidx%)
+			curMax% = distance%(cidx%)
+		endif
+		cidx% = cidx% + 1
+	endwh
+	cidx% = 1
+	while cidx% < length%
+		if curMax% = distance%(cidx%)
+			score%(cidx%) = score%(cidx%) + 1
+		endif
+		cidx% = cidx% + 1
+	endwh
+
+endp
+
+proc parse:(txt$, index%)
+	kps%(index%)      = val(between$:(txt$, " fly ", " km/s"))
+	runtime%(index%)  = val(between$:(txt$, "s for ", " seconds,"))
+	restTime%(index%) = val(mid$(txt$, loc(txt$, "t for ") + 6, len(txt$) - loc(txt$, "t for ") - 13))
+	total%(index%)    = runtime%(index%) + restTime%(index%)
+endp
+
+proc between$:(txt$, start$, end$)
+	local start%, end%, length%
+	length% = len(start$)
+	start% = loc(txt$, start$)
+	end% = loc(txt$, end$)
+		
+	return mid$(txt$, length% + start%, end% - start% - length%)
+endp

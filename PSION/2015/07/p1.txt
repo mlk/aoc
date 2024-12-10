@@ -1,0 +1,367 @@
+CONST realised=1
+CONST variable=2
+CONST do_not=3
+CONST do_and=4
+CONST do_or=5
+CONST do_lshift=6
+CONST do_rshift=7
+
+
+PROC part1:
+	global b&(16), cmd%(702), lv&(702), rv&(702), lvar&(702), rvar&(702), bitmask&
+	local txt$(20), idx%, e$(2), error%, phandle%, g&
+
+	FONT &8, 1
+
+	setBit:
+	error% = 1
+	while error% <= 16
+		bitmask& = bitmask& OR b&(error%)
+		error% = error% + 1
+	endwh
+
+  error% = IOopen(phandle%, "d:\2015\07\input.txt", $0020)	  
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 25)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		parse:(txt$)
+	endwh
+	ioclose(phandle%)
+	print "done"
+	
+	lv&(2) = 3176
+	cmd%(2) = 1
+	
+	GET
+	print "Processing..."
+	do
+		process:
+	until cmd%(1) = realised
+
+	print "lv:";
+	print lv&(1)
+	print "lvr:";
+	print lvar&(1)
+	
+	print "rv:";
+	print rv&(1)
+	print "rvr:";
+	print rvar&(1)
+	print "cmd: ";
+	print cmd%(1)
+	
+	setBit:
+	
+	GET
+
+ENDP
+
+proc process:
+	rem print "Process"
+	doRealisedVariables:
+	doNots:
+	doAnds:
+	doOrs:
+	doLShift:
+	doRShift:
+endp
+
+proc doNots:
+	local idx%
+	idx% = 1
+	
+	while idx% <= 702
+		if cmd%(idx%) = do_not AND lvar&(idx%) = 0
+			print "NOT ";
+			print lv&(idx%);
+			print " = ";
+			print NOT lv&(idx%);
+			print " ";
+			print (NOT lv&(idx%)) AND bitmask&
+			lv&(idx%) = (NOT lv&(idx%)) AND bitmask&
+			cmd%(idx%) = realised
+		endif
+		idx% = idx% + 1
+	endwh
+
+endp
+
+proc doAnds:
+	local idx%
+	idx% = 1
+	
+	while idx% <= 702
+		if cmd%(idx%) = do_and AND lvar&(idx%) = 0 AND rvar&(idx%) = 0
+			lv&(idx%) = lv&(idx%) AND rv&(idx%)
+			cmd%(idx%) = realised
+		endif
+		idx% = idx% + 1
+	endwh
+
+endp
+
+proc doOrs:
+	local idx%
+	idx% = 1
+	
+	while idx% <= 702
+		if cmd%(idx%) = do_or AND lvar&(idx%) = 0 AND rvar&(idx%) = 0
+			lv&(idx%) = lv&(idx%) OR rv&(idx%)
+			cmd%(idx%) = realised
+		endif
+		idx% = idx% + 1
+	endwh
+
+endp
+
+proc doLShift:
+	local idx%
+	idx% = 1
+	
+	while idx% <= 702
+		if cmd%(idx%) = do_lshift AND lvar&(idx%) = 0 AND rvar&(idx%) = 0
+			lv&(idx%) = lv&(idx%) * b&(1 + rv&(idx%))
+			cmd%(idx%) = realised
+		endif
+		idx% = idx% + 1
+	endwh
+
+endp
+
+proc doRShift:
+	local idx%
+	idx% = 1
+	
+	while idx% <= 702
+		if cmd%(idx%) = do_rshift AND lvar&(idx%) = 0 AND rvar&(idx%) = 0
+			if 1 + rv&(idx%) > 16
+				print "rshift"
+				print idx%
+				print 1 + rv&(idx%)
+			endif
+			lv&(idx%) = lv&(idx%) / b&(1 + rv&(idx%))
+			cmd%(idx%) = realised
+		endif
+		idx% = idx% + 1
+	endwh
+
+endp
+
+proc doRealisedVariables:
+	local idx%, count%
+	idx% = 1
+	
+	while idx% <= 702
+			if cmd%(idx%) > 0 and cmd%(idx%) <> realised
+				if lvar&(idx%) <> 0
+
+					if cmd%(lvar&(idx%)) = realised
+						count% = count% + 1
+						lv&(idx%) = lv&(lvar&(idx%)) AND bitmask&
+						if cmd%(idx%) = variable
+							cmd%(idx%) = realised
+						endif
+						lvar&(idx%) = 0
+					endif
+				endif
+
+				if rvar&(idx%) <> 0
+					if cmd%(rvar&(idx%)) = realised
+						print "rv";
+						print rvar&(idx%);
+						print " ";
+						print lv&(rvar&(idx%))
+						count% = count% + 1
+						rv&(idx%) = lv&(rvar&(idx%))
+						rvar&(idx%) = 0
+					endif
+				endif
+
+			endif
+			idx% = idx% + 1
+	endwh
+	
+	rem print count%
+endp
+
+proc getIndex&:(txtAddr&)
+	local f%, s%, next%, result&
+	if peekb(txtAddr&) > 1
+		f% = charAt%:(txtAddr&, 1)
+		next% = 2
+	else
+		f% = 32
+		next% = 1
+	endif
+	
+	if f% = 32
+		f% = 0
+	else
+		f% = f% - 96
+	endif
+	s% = charAt%:(txtAddr&, next%) - 96
+	if s% < 0
+		s% = f%
+		f% = 0
+	endif
+
+	result& = (f% * 26) + s%
+	
+	if result& < 0 and result& > 702
+		print "Bugger"
+		print result&
+		print peek$(txtAddr&)
+	endif
+	
+	return result&
+endp
+
+proc setBit:
+	local idx%
+	idx% = 2
+rem	b&(16) = -32768
+	b&(1) = 1
+	do
+		b&(idx%) = b&(idx% - 1) + b&(idx% - 1)
+		idx% = idx% + 1
+	until idx% > 16
+endp
+
+proc charAt%:(atxt&, idx%)
+	return peekb(atxt& + idx%) 
+endp
+
+proc parse:(line$)
+	local idx&, name$(2), fullCommand$(15), cmdLen%, spaceIdx%, fullCommandAddr%, c%, part1$(5), part2$(5)
+	name$ = right$(line$, 2)
+	
+	idx& = getIndex&:(addr(name$))
+	if idx& = 4
+		print line$
+	endif
+	
+	if idx& < 27
+		cmdLen% = len(line$) - 5
+	else
+		cmdLen% = len(line$) - 6
+	endif
+	
+	fullCommand$ = left$(line$, cmdLen%)
+	if idx& = 4
+		print fullCommand$
+	endif
+	
+	spaceIdx% = strindexof%:(fullCommand$, " ", 1, len(fullCommand$))
+	if spaceIdx% = -1
+		c% = parseNumberOrvar&:(fullCommand$, idx&, 1, addr(fullCommand$))
+		if c% = 1
+			cmd%(idx&) = realised
+		else
+			cmd%(idx&) = variable
+		endif
+	elseif LOC(fullCommand$, "NOT") = 1
+		cmd%(idx&) = do_not
+		part1$ = RIGHT$(fullCommand$, LEN(fullCommand$) - 4)
+		parseNumberOrvar&:(part1$, idx&, 1, addr(part1$))
+	elseif LOC(fullCommand$, " AND ") > 1
+		cmd%(idx&) = do_and
+		c% = LOC(fullCommand$, " AND ")
+		part1$ = LEFT$(fullCommand$, c%)
+		part2$ = RIGHT$(fullCommand$, len(fullCommand$) - (c% + 4))
+		parseNumberOrvar&:(part1$, idx&, 1, addr(part1$))
+		parseNumberOrvar&:(part2$, idx&, 2, addr(part2$))
+	elseif LOC(fullCommand$, " OR ") > 1
+		cmd%(idx&) = do_or
+		c% = LOC(fullCommand$, " OR ")
+		part1$ = LEFT$(fullCommand$, c%)
+		part2$ = RIGHT$(fullCommand$, len(fullCommand$) - (c% + 3))
+		parseNumberOrvar&:(part1$, idx&, 1, addr(part1$))
+		parseNumberOrvar&:(part2$, idx&, 2, addr(part2$))
+	elseif LOC(fullCommand$, " LSHIFT ") > 1
+		cmd%(idx&) = do_lshift
+		c% = LOC(fullCommand$, " LSHIFT ")
+		part1$ = LEFT$(fullCommand$, c%)
+		part2$ = RIGHT$(fullCommand$, len(fullCommand$) - (c% + 7))
+		parseNumberOrvar&:(part1$, idx&, 1, addr(part1$))
+		parseNumberOrvar&:(part2$, idx&, 2, addr(part2$))
+	elseif LOC(fullCommand$, " RSHIFT ") > 1
+		cmd%(idx&) = do_rshift
+		c% = LOC(fullCommand$, " RSHIFT ")
+		part1$ = LEFT$(fullCommand$, c%)
+		part2$ = RIGHT$(fullCommand$, len(fullCommand$) - (c% + 7))
+		if idx& = 4
+			print part1$;
+			print " ";
+			print part2$			
+		endif
+		parseNumberOrvar&:(part1$, idx&, 1, addr(part1$))
+		parseNumberOrvar&:(part2$, idx&, 2, addr(part2$))
+	endif
+endp
+
+proc parseNumberOrvar&:(txt$, idx&, left%, txtAddr&)
+	local val&
+	if idx& = 4
+		print txt$
+	endif
+
+	onerr bugger::	
+	val& = val(txt$)
+	if idx& = 4
+		print "Val"
+	endif
+	if left% = 1
+		lv&(idx&) = val&
+	else
+		rv&(idx&) = val&
+	endif
+	onerr off
+	return 1
+	bugger::
+	onerr off
+	
+	val& = getIndex&:(txtAddr&)
+	if idx& = 4
+		print "var ";
+		print val&;
+		print " ";
+		print txt$
+
+	endif
+	
+	if left% = 1
+		lvar&(idx&) = val&
+	else
+		rvar&(idx&) = val&
+	endif
+	return 0
+endp
+
+PROC strindexof%:(txt$, ch$, start%, slen%)
+	local mcur$(1), l%, didx%
+	l% = 1
+
+	didx% = start%
+	do
+		mcur$ = mid$(txt$, didx%, l%)
+		
+		if mcur$ = ch$
+			return didx%
+		endif
+		didx% = didx% + 1
+	until didx% = slen% + 1
+	
+	return -1
+ENDP
+

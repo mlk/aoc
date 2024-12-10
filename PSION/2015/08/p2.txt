@@ -1,0 +1,52 @@
+PROC part2:
+	local txt$(255), error%, phandle%, total&
+
+	print strcount%:("""""")
+	print strcount%:("""abc\""abc""")
+
+	get
+	
+  error% = IOopen(phandle%, "d:\2015\08\input.txt", $0020)	  
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 255)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		total& = total& + (strcount%:(txt$) - len(txt$))
+
+	endwh
+
+	print total&
+	get
+	ioCLose(phandle%)
+
+ENDP
+
+proc strcount%:(txt$)
+	local idx%, count%, l%, ch$(1)
+	count% = 6
+	idx% = 2
+	l% = len(txt$) - 1
+	while idx% <= l%
+		ch$ = mid$(txt$, idx%, 1)
+		if ch$ = "\" OR ch$ = """"
+			count% = count% + 2
+		else
+			count% = count% + 1
+		endif
+		idx% = idx% + 1
+
+
+	endwh
+	
+	return count%
+endp

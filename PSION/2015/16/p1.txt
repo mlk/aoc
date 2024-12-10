@@ -1,0 +1,124 @@
+PROC part1:
+	local txt$(255), found%, error%, phandle%
+	FONT &8, 1
+
+  error% = IOopen(phandle%, "d:\2015\16\input.txt", $0020)	  
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 255)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		found% = found% + proces%:(txt$)
+	endwh
+	print ">> ";
+	print found%
+	
+	get
+	ioclose(phandle%)
+ENDP
+
+proc proces%:(row$)
+	local idx%, length%, end%, curr$(20), found%
+
+	length% = len(row$)
+	idx% = strindexof%:(row$, ":", 4, length%)
+	found% = 1
+	while idx% < length%
+		end% = strindexof%:(row$, ",",  idx% + 1, length%)
+		if end% = -1
+			end% = length% + 1
+		endif
+		curr$ = mid$(row$, idx% + 2, end% - idx% -2)
+		
+		if @%(left$(curr$, loc(curr$, ":") - 1)):(val(right$(curr$, len(curr$) - loc(curr$, ":") - 1))) <> 0
+			found% = 0
+		endif
+
+		idx% = end%
+	endwh
+	
+	if found% = 1
+		print row$
+	endif
+	
+	return found%
+endp
+
+proc children%:(v)
+	return 3 - v
+endp
+
+proc cats%:(v)
+	if v > 7
+		return 0
+	endif
+	return 1
+endp
+
+proc samoyeds%:(v)
+	return 2 - v
+endp
+
+proc pomeranians%:(v)
+	if v < 3
+		return 0
+	endif
+	return 1
+
+endp
+
+proc akitas%:(v)
+	return 0 - v
+endp
+
+proc vizslas%:(v)
+	return 0 - v
+endp
+
+proc goldfish%:(v)
+	if v < 5
+		return 0
+	endif
+	return 1
+endp
+
+proc trees%:(v)
+	if v > 3
+		return 0
+	endif
+	return 1
+endp
+
+proc cars%:(v)
+	return 2 - v
+endp
+
+proc perfumes%:(v)
+	return 1 - v
+endp
+
+PROC strindexof%:(txt$, ch$, start%, slen%)
+	local mcur$(1), l%, didx%
+	l% = 1
+
+	didx% = start%
+	do
+		mcur$ = mid$(txt$, didx%, l%)
+		
+		if mcur$ = ch$
+			return didx%
+		endif
+		didx% = didx% + 1
+	until didx% = slen% + 1
+	
+	return -1
+ENDP

@@ -1,0 +1,109 @@
+
+PROC part1:
+	global letters%(24), password%(9)
+
+	FONT &8, 1
+
+	setup:("vzbxxyzz")
+	inc%:(8)
+	fill:
+
+	printPassword:	
+
+	while matches%: = -1
+		inc%:(8)
+	endwh
+	printPassword:	
+
+	get
+ENDP
+
+proc matches%:
+	local f%
+	if findThree%: = -1
+		return -1
+	endif
+	f% = findPair%:(2)
+	if f% = -1 OR f% > 6
+		return -1
+	endif
+	return findPair%:(f% + 2)
+endp
+
+proc findPair%:(start%)
+	local idx%
+	idx% = start%
+	while idx% <= 8
+		if password%(idx% - 1)  = password%(idx%)
+			return idx%
+		endif
+		idx% = idx% + 1
+	endwh
+	
+	return -1
+endp
+
+proc findThree%:
+	local idx%
+	idx% = 3
+	while idx% <= 8
+		if password%(idx% - 1) - 1 = password%(idx% - 2) AND password%(idx%) - 1 = password%(idx% - 1)
+			return idx%
+		endif
+		idx% = idx% + 1
+	endwh
+	
+	return -1
+endp
+
+proc inc%:(lvl%)
+	if lvl% = 0
+		return lvl%
+	endif
+	if password%(lvl%) = 122
+		password%(lvl%) = 97
+		return inc%:(lvl% - 1)
+	endif
+	password%(lvl%) = password%(lvl%) + 1
+	return lvl%
+endp
+
+
+proc setup:(txt$)
+	local idx%
+	idx% = 1
+	while idx% <= 8
+		password%(idx%) = asc(mid$(txt$, idx%, 1))
+		idx% = idx% + 1
+	endwh
+endp
+
+proc printPassword:
+	local idx%
+	idx% = 1
+	while idx% <= 8
+		print chr$(password%(idx%));
+		idx% = idx% + 1
+	endwh
+	print ""
+endp
+
+PROC fill:
+	local idx%, Z%, lidx%
+	idx% = 97
+	Z% = 122
+	lidx% = 1
+	
+	while idx% <= Z%
+		if idx% <> 1 AND idx% <> 108 AND idx% <> 111
+			letters%(lidx%) = idx%
+			lidx% = lidx% + 1
+		endif
+				
+	idx% = idx% + 1
+	endwh
+
+endp
+
+
+

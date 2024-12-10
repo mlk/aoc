@@ -1,0 +1,102 @@
+
+PROC part1:
+	global output&, outputIndex&, input&, size&
+	local rounds%
+	
+	rounds% = 40
+	
+	FONT &8, 1
+	output& = alloc(1000000)
+	
+	parseFile:("d:\2015\10\input.txt")
+	print "SETUP"
+	input& =  alloc(1000000)
+	
+	while rounds% > 0
+		swap:
+		process:
+		print rounds%; " " ; outputIndex&
+		rounds% = rounds% - 1
+	endwh
+	print "total size"; 
+	print outputIndex&
+
+	get
+ENDP
+
+proc swap:
+	local spare&
+	spare& = output&
+	output& = input&
+	input& = spare&
+	size& = outputIndex&
+	outputIndex& = 0
+endp
+
+proc process:
+	local idx&, cur%, num%, idxItem%
+	idx& = 1
+	cur% = peekb(input&)
+	num% = 1
+	while idx& < size&
+		idxItem% = peekb(input& + idx&)
+		if idxItem% = cur%
+			num% = num% + 1
+		else
+			rem write:(num$(num%, 5))
+			pokeb output& + outputIndex&, 48 + num%
+			outputIndex& = outputIndex& + 1
+	
+			rem write:(chr$(cur%))	
+			pokeb output& + outputIndex&, cur%
+			outputIndex& = outputIndex& + 1
+
+			cur% = idxItem%
+			num% = 1
+		endif
+		idx& = idx& + 1
+	endwh
+	rem write:(num$(num%, 5))
+	pokeb output& + outputIndex&, 48 + num%
+	outputIndex& = outputIndex& + 1
+	
+	rem write:(chr$(cur%))	
+	pokeb output& + outputIndex&, cur%
+	outputIndex& = outputIndex& + 1
+	
+endp
+
+proc write:(txt$)
+	local l%, idx%, c$(1)
+	l% = len(txt$)
+	idx% = 1
+	while idx% <= l%
+		c$ = mid$(txt$, idx%, 1)
+		pokeb output& + outputIndex&, asc(c$)
+		outputIndex& = outputIndex& + 1
+		idx% = idx% + 1
+		rem print c$
+	endwh
+endp
+
+proc parseFile:(filename$)
+	local txt$(255), error%, phandle%
+  error% = IOopen(phandle%, filename$, $0020)	  
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :		
+		error% = ioread(phandle%, addr(txt$) + 1, 255)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%	
+		write:(txt$)
+	endwh
+	iocLose(pHandle%)
+endp

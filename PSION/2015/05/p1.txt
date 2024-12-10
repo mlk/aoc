@@ -1,0 +1,99 @@
+PROC part1:
+	local error%,phandle%,txt$(25),level%, len%, total&
+
+  error% = IOopen(phandle%, "d:\2015\05\input.txt", $0020)	  
+  if error% < 0 
+  	raise error%
+  endif
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 25)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		if nice%:(txt$)
+			total& = total& + 1
+		endif
+		
+	endwh
+	print total&
+	GET
+ENDP
+
+proc nice%:(name$)
+	if hasBannedName%:(name$)
+		return 0
+	elseif hasDoubleLetters%:(name$) AND hasThreeVowels%:(name$)
+		return 1
+	endif
+	return 0
+endp
+
+proc hasBannedName%:(name$)
+	local idx%, len%, cur$(2)
+	len% = len(name$)
+	idx% = 1
+
+	while idx% < len%
+		cur$ = mid$(name$, idx%, 2)
+
+		if cur$ = "ab" OR cur$ = "cd" OR cur$ = "pq" OR cur$ = "xy"
+			return 1
+		endif
+		
+		idx% = idx% + 1
+	endwh
+
+	return 0
+endp
+
+proc hasDoubleLetters%:(name$)
+	local idx%, len%, prev$(1), cur$(1)
+	len% = len(name$)
+	idx% = 2
+	prev$ = mid$(name$, 1, 1)
+
+	while idx% <= len%
+		cur$ = mid$(name$, idx%, 1)
+
+		if cur$ = prev$
+			return 1
+		endif
+		idx% = idx% + 1
+		prev$ = cur$
+	endwh
+	
+	return 0
+endp
+
+proc hasThreeVowels%:(name$) 
+	local a%, e%, i%, o%, u%, idx%, len%, cur$(1), s%
+	len% = len(name$)
+	idx% = 1
+
+	while idx% <= len%
+		cur$ = mid$(name$, idx%, 1)
+		REM I misread the instructions and hacking was quicker
+		if cur$ = "a"
+			a% = a% + 1
+		elseif cur$ = "e"
+			e% = e% + 1
+		elseif cur$ = "o"
+			o% = o% + 1
+		elseif cur$ = "i"
+			i% = i% + 1
+		elseif cur$ = "u"
+			u% = u% + 1
+		endif
+		if a% + e% + i% + o% + u% > 2
+			return 1
+		endif
+		idx% = idx% + 1
+	endwh
+
+	return 0
+endp

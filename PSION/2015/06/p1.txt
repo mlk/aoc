@@ -1,0 +1,71 @@
+ PROC part1:
+	global pcell&, size&
+	local w&, t&
+	w& = 1000
+	t& = 999
+	size& = w& * w&
+	
+	FONT &8, 1
+
+	pcell& = ALLOC(size&)
+	print pcell&
+	if pcell& = 0
+		raise 0
+	endif
+	
+	clear:
+	
+	rem setSquare:(&0, &0, &999, &999, 0)
+	print get%:(&0, &0)
+	print get%:(&0, &1)
+	print get%:(&0, &2)
+	print get%:(&0, &3)
+	set:(t&, t&, 1)
+	print get%:(t&, t&)
+	REM print get%:(10, 10)
+	REM toggle:(10, 10)
+	REM print get%:(10, 10)
+	GET
+	freealloc pcell&
+ENDP
+
+proc clear:
+	local idx&
+	while idx& <= size&
+		idx& = idx& + 4
+		pokew pcell& + idx&, &0
+	endwh
+endp
+
+proc setSquare:(xs&, ys&, xe&, ye&, data%)
+	local xi&, yi&
+	xi& = xs&
+	while xi& <= xe&
+		yi& = ys&
+		while yi& <= ye&
+			POKEB pcell& + (xi& * 1000) + yi&, data%
+			yi& = yi& + 1
+		endwh
+		xi& = xi& + 1
+		print xi&
+	endwh
+endp
+
+proc set:(x&, y&, data%)
+ 	POKEB pcell& + x& * 1000 + y&, data%
+endp
+
+proc toggle:(x&, y&)
+ 	local data%
+ 	data% = PEEKB(pcell& + x& * 1000 + y&)
+	if data%
+		data% = 0
+	else
+		data% = 1
+	endif
+	set:(x&, y&, data%)
+ endp
+
+proc get%:(x&, y&)
+	return PEEKB(pcell& + x& * 1000 + y&)
+endp

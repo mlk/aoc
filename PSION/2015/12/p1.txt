@@ -1,0 +1,46 @@
+const looking% = 0
+const running% = 1
+
+PROC part1:
+	local txt$(1), error%, phandle%, state%, length%, number$(5), c%, total&
+
+	FONT &8, 1
+
+  error% = IOopen(phandle%, "d:\2015\12\input.txt", $0000)
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :		
+		error% = ioread(phandle%, addr(txt$) + 1, 1)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%	
+		c% = asc(txt$)
+		if state% = looking%
+			if ( c% >= 48 AND c% <= 57 ) or c% = 45
+				state% = running%
+				length% = 1
+				number$ = txt$
+			endif
+		else
+			if c% < 48 OR c% > 57 
+				total& = total& + val(number$)
+				state% = looking%
+			else
+				number$ = number$ + txt$
+				length% = length% + 1
+			endif
+		endif
+		
+		
+	endwh
+	iocLose(pHandle%)
+	print total&
+	get
+ENDP

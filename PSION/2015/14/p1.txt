@@ -1,0 +1,55 @@
+PROC part1:
+	local txt$(255), error%, phandle%, total&
+
+  error% = IOopen(phandle%, "d:\2015\14\input.txt", $0020)
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :		
+		error% = ioread(phandle%, addr(txt$) + 1, 255)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				print error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		print txt$
+
+		print distance%:(txt$, 2503)
+
+	endwh
+	iocLose(pHandle%)
+
+	get
+ENDP
+
+proc distance%:(txt$, time%)
+	local kps%, runtime%, rest%, fullRuns%, left%
+	
+	kps%     = val(between$:(txt$, " fly ", " km/s"))
+	runtime% = val(between$:(txt$, "s for ", " seconds,"))
+	rest%    = val(mid$(txt$, loc(txt$, "t for ") + 6, len(txt$) - loc(txt$, "t for ") - 13))
+
+	fullRuns% = (time% / (runtime% + rest%))
+	left%     = time% - ((runtime% + rest%) * fullRuns%)
+
+	if left% >= runtime%
+		left% = 0
+		fullRuns% = fullRuns% + 1
+	endif
+	
+	return ((fullRuns% * runtime%) + left%) * kps%
+endp
+
+proc between$:(txt$, start$, end$)
+	local start%, end%, length%
+
+	length% = len(start$)
+	start%  = loc(txt$, start$)
+	end%    = loc(txt$, end$)
+		
+	return mid$(txt$, length% + start%, end% - start% - length%)
+endp

@@ -1,0 +1,108 @@
+PROC part2:
+	global curX%, curY%, robX%, robY%
+	local error%, txt$(1), phandle%, idx%, minX%, minY%, maxX%, maxY%, data%(20000), count%, turn%
+
+
+	curX% = 21
+	curY% = 92
+	robX% = 21
+	robY% = 92
+	count% = 1
+	turn% = 1
+	
+	data%(toIndex%:(curX%, curY%)) = 1
+	
+  error% = IOopen(phandle%, "d:\2015\03\input.txt" , $0000)
+  if error%
+  	raise error%
+  endif
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 1)
+		if error% < 0
+			if error% = -36
+				break
+			else
+				raise error%
+			endif
+		endif
+		pokeb addr(txt$), error%
+
+		if turn% = 1
+			dir:(txt$)
+			turn% = 2
+		else
+			dirRob:(txt$)
+			turn% = 1
+		endif
+		
+		idx% = toIndex%:(curX%, curY%)
+		if data%(idx%) = 0
+			count% = count% + 1
+		endif
+
+		data%(idx%) = 1
+
+		idx% = toIndex%:(robX%, robY%)
+		if data%(idx%) = 0
+			count% = count% + 1
+		endif
+
+		data%(idx%) = 1
+
+		minX% = MIN(minX%, curx%)
+		minY% = MIN(minY%, curY%)
+
+		maxX% = MAX(maxX%, curx%)
+		maxY% = MAX(maxY%, curY%)
+	
+		minX% = MIN(minX%, robx%)
+		minY% = MIN(minY%, robY%)
+
+		maxX% = MAX(maxX%, robx%)
+		maxY% = MAX(maxY%, robY%)
+	
+	endwh
+
+	print minX%;
+	print "x";
+	print minY%
+
+	print maxX%;
+	print "x";
+	print maxY%
+	
+	print (ABS(minX%) + maxX% + 1) * (ABS(minY%) + maxY% + 1)
+	
+	print count%
+	
+	IOClose(phandle%)
+	GET
+ENDP
+
+proc dir: (d$)
+	if d$ = ">"
+		curX% = curX% + 1
+	elseif d$ = "<"
+		curX% = curX% - 1
+	elseif d$ = "^"
+		curY% = curY% + 1
+	else
+		curY% = curY% - 1
+	endif
+endp
+
+proc dirRob: (d$)
+	if d$ = ">"
+		robX% = robX% + 1
+	elseif d$ = "<"
+		robX% = robX% - 1
+	elseif d$ = "^"
+		robY% = robY% + 1
+	else
+		robY% = robY% - 1
+	endif
+endp
+
+proc toIndex%:(x%, y%)
+	return (x% * 136) + y%
+endp

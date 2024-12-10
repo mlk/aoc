@@ -1,0 +1,201 @@
+const size& = 100
+
+PROC part2:
+	local id&, next&, x& ,y&, swap&, step%
+	id& = alloc(size& * size&)
+	next& = alloc(size& * size&)
+	brokenLights:(id&)
+
+	load:(id&, "d:\2015\18\input.txt")
+	brokenLights:(id&)
+	print "Procesing"
+	step:(id&, next&)
+	while step% < 100
+		print step%
+		swap& = id&
+		id& = next&
+		next& = swap&
+		step:(id&, next&)
+		step% = step% + 1			
+	endwh
+	print "Number of lights on: ";
+	print living%:(id&)	
+	get
+	get
+	get
+	freealloc(id&)
+	
+	freealloc(next&)
+ENDP
+
+proc brokenLights:(next&)
+	local z&, n& 
+	z& = 0
+	n& = 99
+	set:(next&, z&, z&, 1)
+	set:(next&, z&, n&, 1)	
+	set:(next&, n&, z&, 1)
+	set:(next&, n&, n&, 1)	
+endp
+
+proc step:(id&, next&)
+	local x&, y&, c%
+	
+	while x& < size&
+		y& = 0
+		while y& < size&
+			c% = count%:(id&, x&, y&)
+			if at%:(id&, x&, y&) = 1
+				if c% = 2 or c% = 3
+					set:(next&, x&, y&, 1)
+				else
+					set:(next&, x&, y&, 0)				
+				endif
+			else
+				if c% = 3
+					set:(next&, x&, y&, 1)
+				else
+					set:(next&, x&, y&, 0)				
+				endif
+			endif
+			y& = y& + 1
+		endwh
+		x& = x& + 1
+	endwh
+	brokenLights:(next&)
+endp
+
+proc living%:(id&)
+	local x&, y&, c%
+	
+	while x& < size&
+		y& = 0
+		while y& < size&
+			c% = c% + at%:(id&, x&, y&)
+
+			y& = y& + 1
+		endwh
+		x& = x& + 1
+	endwh
+
+	return c%
+endp
+
+
+
+proc load:(id&, file$)
+	local txt$(255), error%, phandle%, x&, y&
+	
+  error% = IOopen(phandle%, file$, $0020)
+  if error% < 0 
+  	raise error%
+  endif
+  print "Parsing..."
+	while 1 :
+		error% = ioread(phandle%, addr(txt$) + 1, 255)
+		if error% < 0
+			if error% <> -36
+				print "read error"
+				raise error%
+			endif
+			break
+		endif
+		pokeb addr(txt$), error%
+		x& = 0
+		while x& < size&
+			if mid$(txt$, x& + 1, 1) = "#"
+				set:(id&, x&, y&, 1)
+			else
+				set:(id&, x&, y&, 0)
+			endif
+			x& = x&  + 1
+		endwh
+		y& = y& + 1
+	endwh
+	
+	ioclose(phandle%)
+endp
+
+proc count%:(id&, x&, y&)
+	local ax&, ay&, sx&, sy&, count%
+	ax& = x& - 1
+	ay& = y& - 1
+	sx& = x& + 1
+	sy& = y& + 1
+
+	while ax& <= sx&
+		if ax& >= 0 AND ax& < size&
+			ay& = y& - 1
+			while ay& <= sy&
+				if ay& >= 0 AND ay& < size&
+					if ax& = x& AND ay& = y&
+					else
+						count% = count% + at%:(id&, ax&, ay&)
+					endif
+				endif
+				ay& = ay& + 1
+			endwh
+		endif
+		ax& = ax& + 1
+	endwh
+
+	return count%	
+endp
+
+proc clear:(id&)
+	local x&, y&
+
+	print "Clear"
+
+	while x& < size&
+		y& = 0
+		while y& < size&
+			set:(id&, x&, y&, 0)
+			y& = y& + 1
+		endwh
+		x& = x& + 1
+	endwh
+endp
+
+proc total%:(id&)
+	local x&, y&, total%
+
+	while x& < size&
+		y& = 0
+		while y& < size&
+			total% = total + at%:(id&, x&, y&)
+			y& = y& + 1
+		endwh
+		x& = x& + 1
+	endwh
+	return total%
+endp
+
+
+proc display:(id&)
+	local x&, y&
+	
+	print "Display"
+
+	while y& < size&
+		x& = 0
+		while x& < size&
+			if at%:(id&, x&, y&) = 1
+				print "#";
+			else
+				print ".";
+			endif
+			x& = x& + 1
+		endwh
+		print
+		y& = y& + 1
+	endwh
+endp
+
+proc at%:(id&, x&, y&)
+	return peekb(id& + x& + (y& * size&))
+endp
+
+proc set:(id&, x&, y&, v%)
+	pokeb id& + x& + (y& * size&), v%
+endp
