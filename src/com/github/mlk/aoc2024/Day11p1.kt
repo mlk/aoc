@@ -9,7 +9,7 @@ fun main() {
 
 }
 
-fun count(num: Long, layer: Int): Long {
+private fun count(num: Long, layer: Int): Long {
     if(layer == 0) {
         return 1
     }
@@ -20,3 +20,4 @@ fun count(num: Long, layer: Int): Long {
     }
     return count(num * 2024, layer -1)
 }
+
