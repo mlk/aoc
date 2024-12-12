@@ -31,3 +31,14 @@ fun List<String>.forEachPoint(action: (P, Char) -> Unit) {
 fun <T> List<String>.mapPoints(action: (P, Char) -> T) =
     this.mapIndexed { y, line -> line.mapIndexed { x, item -> action(P(x, y), item) } }
         .flatten()
+
+private val corners = listOf(Pair(P(1, 0), P(0, 1)), Pair(P(0, 1), P(-1, 0)), Pair(P(-1, 0), P(0, -1)), Pair(P(0, -1), P(1, 0)))
+private val innerCorners = listOf(P(1, 1), P(-1, 1), P(-1, -1), P(1, -1))
+
+fun List<String>.countCorners(loc: P) = corners
+    .map { Pair(loc.add(it.first), loc.add(it.second)) }
+    .count { charAt(loc) != charAt(it.first) && charAt(loc) != charAt(it.second) } +
+        corners
+            .map { Pair(loc.add(it.first), loc.add(it.second)) }
+            .zip(innerCorners.map { loc.add(it) })
+            .count { charAt(loc) == charAt(it.first.first) && charAt(loc) == charAt(it.first.second) && charAt(loc) != charAt(it.second) }
