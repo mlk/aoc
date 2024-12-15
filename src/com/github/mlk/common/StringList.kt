@@ -23,8 +23,8 @@ fun List<String>.find(item: Char): P {
 }
 
 fun List<String>.forEachPoint(action: (P, Char) -> Unit) {
-    this.forEachIndexed { x, line ->
-        line.forEachIndexed { y, item -> action(P(x, y), item) }
+    this.forEachIndexed { y, line ->
+        line.forEachIndexed { x, item -> action(P(x, y), item) }
     }
 }
 
