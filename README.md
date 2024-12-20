@@ -82,4 +82,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 14: Kotlin on the ClockworkPi DevTerm
 * Day 15: Kotlin on the ClockworkPi DevTerm
 * Day 19: Kotlin on the ClockworkPi DevTerm
-* Day 20p1: Kotlin on the ClockworkPi DevTerm
+* Day 20: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now)
