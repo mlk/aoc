@@ -81,5 +81,6 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 13: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now). I need to retake GCSE maths and maybe do A Level maths.
 * Day 14: Kotlin on the ClockworkPi DevTerm
 * Day 15: Kotlin on the ClockworkPi DevTerm
+* Day 18: Kotlin on the ClockworkPi DevTerm
 * Day 19: Kotlin on the ClockworkPi DevTerm
 * Day 20: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now)
