@@ -84,5 +84,5 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 18: Kotlin on the ClockworkPi DevTerm
 * Day 19: Kotlin on the ClockworkPi DevTerm
 * Day 20: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now)
-* Day 23p1: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now)
+* Day 23: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) - I need to find some good youtube videos on Bors Kerboosch as I'm still not 100% on it.
 * Day 24p1: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) 
