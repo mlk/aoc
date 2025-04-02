@@ -1,7 +1,7 @@
 🎄 AoC
 ===
 
-My rather shitty solutions to [Advent of Code](https://adventofcode.com/). I use Advent Of Code in two ways, the first is the way it is meant to be used as a challange during December. But I also use Advent of Code to experiment with different handheld computers.
+My rather shitty solutions to [Advent of Code](https://adventofcode.com/). I use Advent Of Code in two ways, the first is the way it is meant to be used as a challenge during December. But I also use Advent of Code to experiment with different handheld computers.
 The order below is the order I started them in. 
 
 2022
@@ -84,7 +84,7 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 18: Kotlin on the ClockworkPi DevTerm
 * Day 19: Kotlin on the ClockworkPi DevTerm
 * Day 20: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now)
-* Day 23: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) - I need to find some good youtube videos on Bors Kerboosch as I'm still not 100% on it.
+* Day 23: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) - I need to find some good YouTube videos on Bors Kerboosch as I'm still not 100% on it.
 * Day 24p1: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) 
 
 2020
