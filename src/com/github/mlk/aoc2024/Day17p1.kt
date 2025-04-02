@@ -6,20 +6,23 @@ import kotlin.math.pow
 fun main() {
     val data = File("c:/aocs/input.txt").readLines()
 
-    val m = Machine(data.findNum("Register A"), data.findNum("Register B"), data.findNum("Register C"), 0, data.findNums("Program"))
+    val m = Machine(62769496, data.findNum("Register B"), data.findNum("Register C"), 0, data.findNums("Program"))
     m.run()
+    println()
+    val m2 = Machine(62769520, data.findNum("Register B"), data.findNum("Register C"), 0, data.findNums("Program"))
+    m2.run()
     //m.display()
 }
 
-private fun List<String>.findNum(s: String): Int {
-    return this.findLast { it.startsWith(s) }!!.split(": ")[1].toInt()
+private fun List<String>.findNum(s: String): Long {
+    return this.findLast { it.startsWith(s) }!!.split(": ")[1].toLong()
 }
 
 private fun List<String>.findNums(s: String): List<Int> {
     return this.findLast { it.startsWith(s) }!!.split(": ")[1].split(",").map { it.toInt() }
 }
 
-class Machine(var a: Int, var b: Int, var c: Int, var pc: Int, val program: List<Int>) {
+class Machine(var a: Long, var b: Long, var c: Long, var pc: Int, val program: List<Int>) {
 
     fun display() {
         println("A=$a, B=$b, C=$c, PC=$pc")
@@ -32,10 +35,10 @@ class Machine(var a: Int, var b: Int, var c: Int, var pc: Int, val program: List
             //display()
             if(instruction == 3) {
 
-                if(a == 0) {
+                if(a == 0L) {
                     pc += 2
                 } else {
-                    pc = literalOperand()
+                    pc = literalOperand().toInt()
                 }
                 //return
             } else {
@@ -57,17 +60,17 @@ class Machine(var a: Int, var b: Int, var c: Int, var pc: Int, val program: List
 
     fun adv() {
         //println("DIV: $a by ${comboOperand()} POW ${comboOperand().toDouble().pow(2)} == ${a / comboOperand().toDouble().pow(2)}")
-        a = (a / 2.0.pow(comboOperand())).toInt()
+        a = (a / 2.0.pow(comboOperand().toDouble())).toLong()
     }
 
     fun bdv() {
         //println("bdv")
-        b = (a / 2.0.pow(comboOperand())).toInt()
+        b = (a / 2.0.pow(comboOperand().toDouble())).toLong()
     }
 
     fun cdv() {
         //println("cdv")
-        c = (a / 2.0.pow(comboOperand())).toInt()
+        c = (a / 2.0.pow(comboOperand().toDouble())).toLong()
     }
 
     fun bxl() {
@@ -88,13 +91,13 @@ class Machine(var a: Int, var b: Int, var c: Int, var pc: Int, val program: List
 
 
 
-    fun literalOperand(): Int {
-        return program[pc + 1]
+    fun literalOperand(): Long {
+        return program[pc + 1].toLong()
     }
 
-    fun comboOperand(): Int {
+    fun comboOperand(): Long {
         val current = program[pc + 1]
-        if(current <= 3) { return current }
+        if(current <= 3) { return current.toLong() }
         if(current == 4) { return a }
         if(current == 5) { return b }
         if(current == 6) { return c }
