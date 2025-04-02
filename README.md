@@ -91,5 +91,5 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 ---
 
 **Language**: MMBasic<br>
-**Hardware**: Clockwork PI PicoCalc (Rasberry Pi Pico)<br>
+**Hardware**: Clockwork PI PicoCalc (Raspberry Pi Pico)<br>
 **Notes:**  [See PicoCalc README](https://github.com/mlk/aoc/tree/main/PicoCalc)
