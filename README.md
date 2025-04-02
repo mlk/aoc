@@ -86,3 +86,10 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 * Day 20: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now)
 * Day 23: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) - I need to find some good youtube videos on Bors Kerboosch as I'm still not 100% on it.
 * Day 24p1: Kotlin on the GPD WIN mini (in desktop mode, I'm a little time poor right now) 
+
+2020
+---
+
+**Language**: MMBasic<br>
+**Hardware**: Clockwork PI PicoCalc (Rasberry Pi Pico)<br>
+**Notes:**  [See PicoCalc README](https://github.com/mlk/aoc/tree/main/PicoCalc)
