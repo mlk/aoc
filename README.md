@@ -93,3 +93,13 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 **Language**: MMBasic<br>
 **Hardware**: Clockwork PI PicoCalc (Raspberry Pi Pico)<br>
 **Notes:**  [See PicoCalc README](https://github.com/mlk/aoc/tree/main/PicoCalc)
+
+2025
+---
+
+**Language**: Mixed<br>
+**Hardware**: Mixed<br>
+**Notes:** While I do not intend on using a different computer each day, I will be mixing it up this year.
+
+* Day 1: VB6 on the Hand386 (p1, p2 has a bug and it was quicker to sense check my logic in Kotlin than debug in VB6)
+* Day 2: Kotlin on the GPD WIN mini (in desktop mode), feeling ill today. Just want to get it done.
