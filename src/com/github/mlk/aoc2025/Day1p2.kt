@@ -8,8 +8,6 @@ fun main() {
     val data = File("C:\\Users\\SR116\\Downloads\\input.txt").readText()
     data.split("\n").map { it.trim() }.forEach { line ->
         if (!line.isEmpty()) {
-
-            println(line)
             val data = line.replace("L", "").replace("R", "").toInt()
             for (i in 1..data) {
                 if (line.startsWith("R")) c++
