@@ -3,13 +3,14 @@ package com.github.mlk.aoc2018
 import java.io.File
 
 fun main() {
+
     val data = File("C:\\Users\\SR116\\Downloads\\input.txt").readText()
     println(
         data.split("\n")
             .map { it.trim() }
-            .filter { !it.isEmpty() }.sumOf { currrentNumber ->
+            .filter { !it.isEmpty() }.sumOf { currentNumber ->
 
-                val numbers = currrentNumber.toCharArray().map { it.digitToInt() }.toList()
+                val numbers = currentNumber.toCharArray().map { it.digitToInt() }.toList()
                 val numList = mutableListOf<Int>()
                 var startPoint = 0
                 for (i in 11 downTo 0) {
