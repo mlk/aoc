@@ -103,3 +103,4 @@ I hack my existing solution for Part 2 so look at the git history to find Part 1
 
 * Day 1: VB6 on the Hand386 (p1, p2 has a bug and it was quicker to sense check my logic in Kotlin than debug in VB6)
 * Day 2: Kotlin on the GPD WIN mini (in desktop mode), feeling ill today. Just want to get it done.
+* Day 3: Kotlin on the GPD WIN mini (in desktop mode), feeling ill today. Just want to get it done.
