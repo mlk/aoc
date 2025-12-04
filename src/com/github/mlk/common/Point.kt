@@ -8,6 +8,7 @@ data class P(val x: Int, val y: Int) {
     fun mul(other: Int) = P(x * other, y * other)
     fun manhattanDistance(other: P): Int = abs(x-other.x) + abs(y-other.y)
     fun cardinalNeighbours() = cardinalDirections.map { this.add(it) }
+    fun neighbours() = directions.map { this.add(it) }
     fun inBounds(h: Int, w: Int) = x >= 0 && x <= h && y >= 0 && y <= w
 }
 

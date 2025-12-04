@@ -1,5 +1,17 @@
 package com.github.mlk.common
 
+fun List<String>.replace(locs: List<P>, default: Char = '.'): List<String> {
+    return this.mapIndexed { y, line ->
+        val chars = line.toCharArray()
+        locs.forEach { loc ->
+            if(loc.y == y) {
+                chars[loc.x] = default
+            }
+        }
+        return@mapIndexed chars.joinToString("")
+    }.toList()
+}
+
 fun List<String>.charAt(loc: P, default: Char = '.'): Char {
     if(loc.y < 0 || loc.y >= this.size) return default
     if(loc.x < 0 || loc.x >= this[loc.y].length) return default

@@ -1,4 +1,4 @@
-package com.github.mlk.aoc2018
+package com.github.mlk.aoc2025
 
 import java.io.File
 
