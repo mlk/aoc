@@ -1,9 +1,7 @@
 package com.github.mlk.aoc2025
 
-import com.github.mlk.common.P
 import com.github.mlk.common.P3D
-import com.github.mlk.common.charAt
-import com.github.mlk.common.find
+
 import com.github.mlk.common.toP3D
 import java.io.File
 
